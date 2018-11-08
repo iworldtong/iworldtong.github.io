@@ -5,8 +5,8 @@
     <description>世界再大，还是遇见了你</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 08 Nov 2018 12:50:56 +0800</pubDate>
-    <lastBuildDate>Thu, 08 Nov 2018 12:50:56 +0800</lastBuildDate>
+    <pubDate>Thu, 08 Nov 2018 13:27:46 +0800</pubDate>
+    <lastBuildDate>Thu, 08 Nov 2018 13:27:46 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -138,7 +138,7 @@ OPT(i)=\max \left \{ \begin{aligned} &amp;OPT(pre(i)) + W_i&amp; \quad \text{安
   &lt;p&gt;&lt;strong&gt;简化后的课程安排问题：&lt;/strong&gt;假设每个课程的选课人数都为1。我们的任务还是和原来一样，选择一些不冲突的课程，让来该教室上课的学生人数最多。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;对于简化后的课程安排问题，直观上，我们应该选择这样一门课，选出它后剩下的资源应该能被尽量多的其他任务所用。现在考虑可选活动，其中必然有一个最先结束。因此，直觉告诉我们应该选择 $S$ 中最早结束的课程，因为它剩下的资源可供它之后尽量多的课程使用。（如果 $S$ 中最早结束的课程有多个，可以选择其中任意一个）换句话说，由于课程已经按结束时间单调递增的顺序排列，贪心选择就是选择 $a_1$ 。（&lt;strong&gt;当然，选择最早结束的课程并不是本问题唯一的贪心选择方法&lt;/strong&gt;）&lt;/p&gt;
+&lt;p&gt;对于简化后的课程安排问题，直观上，我们应该选择这样一门课，选出它后剩下的资源应该能被尽量多的其他课程所用。现在考虑可选课程，其中必然有一个最先结束。因此，直觉告诉我们应该选择 $S$ 中最早结束的课程，因为它剩下的资源可供它之后尽量多的课程使用。（如果 $S$ 中最早结束的课程有多个，可以选择其中任意一个）换句话说，由于课程已经按结束时间单调递增的顺序排列，贪心选择就是选择 $a_1$ 。（&lt;strong&gt;当然，选择最早结束的课程并不是本问题唯一的贪心选择方法&lt;/strong&gt;）&lt;/p&gt;
 
 &lt;p&gt;下面证明我们的直觉是正确的，即&lt;strong&gt;贪心选择——最早结束的活动——总是最优解的一部分&lt;/strong&gt;。&lt;/p&gt;
 
@@ -189,7 +189,7 @@ OPT(i)=\max \left \{ \begin{aligned} &amp;OPT(pre(i)) + W_i&amp; \quad \text{安
 
 &lt;h2 id=&quot;3-dp-vs-greedy&quot;&gt;3. DP vs Greedy&lt;/h2&gt;
 
-&lt;p&gt;根据前面分析，可以总结 DP 与 Greedy 的异同点：&lt;/p&gt;
+&lt;p&gt;总结 DP 与 Greedy 的异同点：&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;相似&lt;/strong&gt;
