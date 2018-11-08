@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="0rC5v1zVHWU93qDhTriIdP6JGbOnZ9177vNXXrry3gs" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界再大，还是遇见了你">
+    <meta name="keywords"  content="iworld, 木柯桐, 博客, 深度学习, 计算机视觉, 视频理解">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="从矩阵微分的角度推导BP算法（附代码） - 木柯桐的博客 | iworld's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="1. 矩阵的微分
+
+">
+    
+    <meta property="article:published_time" content="2018-11-09T00:00:00Z">
+    
+    
+    <meta property="article:author" content="iworld">
+    
+    
+    <meta property="article:tag" content="Deep Learning">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar.jpg">
+    <meta property="og:url" content="http://localhost:4000/2018/11/09/matrix-differential-to-BP/">
+    <meta property="og:site_name" content="木柯桐的博客 | iworld's Blog">
+    
+    <title>从矩阵微分的角度推导BP算法（附代码） - 木柯桐的博客 | iworld's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2018/11/09/matrix-differential-to-BP/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">iworld's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/pic/">pic</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=Deep+Learning" title="Deep Learning">Deep Learning</a>
+                        
+                    </div>
+                    <h1>从矩阵微分的角度推导BP算法（附代码）</h1>
+                    
+                    <h2 class="subheading">矩阵微分在深度学习中的应用</h2>
+                    <span class="meta">Posted by iworld on November 9, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h2 id="1-矩阵的微分">1. 矩阵的微分</h2>
+
+<h3 id="11-函数矩阵的微分形式">1.1 函数矩阵的微分形式</h3>
+
+<p>为简单起见，记 $\mathbf {e}_i$ 为第 $i$ 个分量为1，其余分量为0的单位列向量。</p>
+
+<p>对于 $\mathbf{X} \in \mathbb{R}^{m\times n}$，有 $m\times n$ 元函数 $f(\mathbf{X})$，定义 $f(\mathbf{X})$ 对 $\mathbf{X}$ 的导数为</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+\frac{df}{d\mathbf{X}} &=& \left( \frac{\partial f}{\partial \xi_{ij}} \right)_{m\times n} = \begin{bmatrix} \frac{\partial f}{\partial \xi_{11}} & \cdots & \frac{\partial f}{\partial \xi_{1n}} \\ \vdots &&\vdots \\ \frac{\partial f}{\partial \xi_{m1}}&\cdots&\frac{\partial f}{\partial \xi_{mn}} \end{bmatrix}\\
+&=& \sum_{i=1}^m \sum_{j=1}^n \frac{\partial f}{\partial \xi_{ij}}\mathbf{e}_i\mathbf{e}_j^T
+\end{eqnarray*} %]]></script>
+
+<p><strong>注意：</strong>上式中 $\mathbf{e}_i$为 $m$ 维列向量，$\mathbf{e}_j$为 $n$ 维列向量。</p>
+
+<h3 id="12-矩阵函数的微分形式">1.2 矩阵函数的微分形式</h3>
+
+<p>结合1.1，定义矩阵 $\frac{d\mathbf{F}}{d \mathbf{X}} = \begin{bmatrix} \frac{\partial \mathbf{F}}{\partial \xi_{11}} &amp; \cdots &amp; \frac{\partial \mathbf{F}}{\partial \xi_{1n}} \ \vdots &amp;&amp;\vdots \ \frac{\partial \mathbf{F}}{\partial \xi_{m1}}&amp;\cdots&amp;\frac{\partial \mathbf{F}}{\partial \xi_{mn}} \end{bmatrix}$，对 $\mathbf{X}$ 的导数为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\frac{d\mathbf{F}}{d \mathbf{X}} = \begin{bmatrix} \frac{\partial \mathbf{F}}{\partial \xi_{11}} & \cdots & \frac{\partial \mathbf{F}}{\partial \xi_{1n}} \\ \vdots &&\vdots \\ \frac{\partial \mathbf{F}}{\partial \xi_{m1}}&\cdots&\frac{\partial \mathbf{F}}{\partial \xi_{mn}} \end{bmatrix}_{mr\times ns} \quad \text{其中 } \frac{d\mathbf{F}}{d \xi_{ij}} = \begin{bmatrix} \frac{\partial f_{11}}{\partial \xi_{ij}} & \cdots & \frac{\partial f_{1s}}{\partial \xi_{ij}} \\ \vdots &&\vdots \\ \frac{\partial f_{r1}}{\partial \xi_{ij}}&\cdots&\frac{\partial f_{rs}}{\partial \xi_{ij}} \end{bmatrix}_{r\times s} %]]></script>
+
+<h3 id="13-一些重要性质">1.3 一些重要性质</h3>
+
+<p>首先给出向量和矩阵求导的链式法则：</p>
+
+<blockquote>
+  <ul>
+    <li>若 $\mathbf{y}(\mathbf{x})$ 是 $\mathbf{x}$ 的向量值函数，则</li>
+  </ul>
+
+  <script type="math/tex; mode=display">\frac{\partial f(\mathbf{y}(\mathbf{x}))}{\partial \mathbf{x}}=\frac{\partial \mathbf{y}^T(\mathbf{x})}{\partial \mathbf{x}} \frac{\partial f(\mathbf{y})}{\partial \mathbf{y}}</script>
+
+  <p>式中 $\frac{\partial \mathbf{y}^T(\mathbf{x})}{\partial \mathbf{x}}$ 为 $n\times n$ 矩阵。</p>
+
+  <ul>
+    <li>设 $\mathbf{A}$ 为 $m\times n$ 矩阵，且 $y=f(\mathbf{A})$ 和 $g(y)$ 分别是以矩阵 $\mathbf {A}$ 和标量 $y$ 为变元的实值函数，则</li>
+  </ul>
+
+  <script type="math/tex; mode=display">\frac{\partial g(f(\mathbf{A}))}{\partial \mathbf{A}}=\frac{dg(y)}{dy}\frac{\partial f(\mathbf{A})}{\partial \mathbf{A}}</script>
+
+</blockquote>
+
+<p>总结一下：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+f(\mathbf{t})=f(\mathbf{x(\mathbf{t})}) &\rightarrow& df=d\mathbf{x}^Tdf\\
+\mathbf{f}(\mathbf{t})=\mathbf{f}(\mathbf{x(\mathbf{t})}) &\rightarrow& d\mathbf{f}=d\mathbf{f}d\mathbf{x}
+\end{eqnarray*} %]]></script>
+
+<p>下面介绍两个在推导 BP 算法时用到的性质：</p>
+
+<blockquote>
+  <p><strong>性质1</strong>    $\mathbf{y}=\mathbf{W}\mathbf{x}$，函数 $f(\mathbf{y})$ 是向量 $\mathbf{y}$ 的函数，其中 $\mathbf{W}\in C^{m\times n}$ 和 $\mathbf{x}\in C^n$ 无关,则有</p>
+
+  <script type="math/tex; mode=display">\frac{d\mathbf{y}^T}{d\mathbf{x}}=\mathbf{W}^T,\quad\frac{d(f(\mathbf{y}))}{d\mathbf{W}}=\frac{d(f(\mathbf{y}))}{d\mathbf{y}}\cdot \mathbf{x}^T</script>
+
+</blockquote>
+
+<p><strong>证明：</strong>观察到$\frac{d\mathbf{x}^T}{d\mathbf{x}}=\mathbf{I}$，则有</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+\frac{d\mathbf{y}^T}{d\mathbf{x}}&=&\frac{d\mathbf{x}^T\mathbf{W}^T}{d\mathbf{x}}=\frac{d\mathbf{x}^T}{d\mathbf{x}}\mathbf{W}^T=\mathbf{W}^T \\
+\frac{d(f(\mathbf{y}))}{d\mathbf{W}}&=&\frac{d(f(\mathbf{y}))}{d\mathbf{y}}\frac{d\mathbf{y}}{d\mathbf{W}} \\
+&=& \frac{d(f(\mathbf{y}))}{d\mathbf{y}}\cdot \mathbf{x}^T
+\end{eqnarray*} %]]></script>
+
+<blockquote>
+  <p><strong>性质2</strong>    设 $f(\mathbf{x})$ 是向量 $\mathbf{x}$ 的函数，而 $\mathbf{x}$ 又是 $\mathbf{u}$ 的函数，则有</p>
+
+  <script type="math/tex; mode=display">\frac{df}{d\mathbf{u}}=\frac{d\mathbf{x}^T}{d\mathbf{u}}\cdot\frac{df}{d\mathbf{x}}</script>
+
+  <p>根据1.2中定义，有 $\frac{d\mathbf{x}^T}{d\mathbf{u}}=\left(\frac{d\mathbf{x}^T}{du_1},\frac{d\mathbf{x}^T}{du_2},\ldots, \frac{d\mathbf{x}^T}{du_n}  \right)^T$，其中 $\frac{d\mathbf{x}^T}{du_i}=\left( \frac{dx_1}{du_i}, \frac{dx_2}{du_i},\ldots, \frac{dx_n}{du_i} \right)$。</p>
+</blockquote>
+
+<p><strong>证明：</strong>由雅可比矩阵的传递性可知</p>
+
+<script type="math/tex; mode=display">\frac{\partial \mathbf{f}}{\partial \mathbf{u}}=\frac{\partial \mathbf{f}}{\partial \mathbf{x}}\frac{\partial \mathbf{x}}{\partial \mathbf{u}}</script>
+
+<p>再根据 $f$ 退化成实数时雅克⽐矩阵和函数导数的关系，有</p>
+
+<script type="math/tex; mode=display">\frac{\partial \mathbf{f}}{\partial \mathbf{x}}=\frac{\partial {f}}{\partial \mathbf{x}^T}, \quad\frac{\partial \mathbf{f}}{\partial \mathbf{u}}=\frac{\partial f}{\partial \mathbf{u}^T}</script>
+
+<p>将上面三式结合，可得到如下链式法则</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+\frac{\partial f}{\partial \mathbf{u}^T} &=& \frac{\partial {f}}{\partial \mathbf{x}^T}\frac{\partial \mathbf{x}}{\partial \mathbf{u}}\\
+&\downarrow& 等号两边同时转置 \\
+\frac{df}{d\mathbf{u}} &=& \frac{d\mathbf{x}^T}{d\mathbf{u}}\cdot\frac{df}{d\mathbf{x}}
+\end{eqnarray*} %]]></script>
+
+<p><strong>推广：</strong>类似的，若 $\mathbf{u}$ 是 $\mathbf{v}$ 的向量值函数，则有</p>
+
+<script type="math/tex; mode=display">\frac{df}{d\mathbf{v}}=\frac{d\mathbf{u}^T}{d\mathbf{v}}\cdot\frac{d\mathbf{x}^T}{d\mathbf{u}}\cdot\frac{df}{d\mathbf{x}}</script>
+
+<h2 id="2-bp算法推导的矩阵形式">2. BP算法推导的矩阵形式</h2>
+
+<p>考虑如下三层前馈神经网络的回归问题：</p>
+
+<div align="center"><img width="200px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1541658478/iblog/matrix-differential-to-BP/matrix-differential-to-BP-1.png" /></div>
+
+<ul>
+  <li>输入层：输入 $\mathbf{x}$</li>
+  <li>隐含层：连接权重为 $\mathbf{W}_1$ ，激活函数为 $\varphi (\cdot)$ ，该层输入为 $\mathbf{z}_1=\mathbf{W}_1\mathbf{x}$，输出为 $\mathbf{h}=\varphi(\mathbf{z}_1)$</li>
+  <li>输出层：连接权重为 $\mathbf{W}_2$ ，该层输入为 $\mathbf{z}_2=\mathbf{W}_2\mathbf{h}$，输出为 $\mathbf{o}=\mathbf{z}_2$</li>
+  <li>损失函数： $e=\frac{1}{2}||\mathbf{y}-\mathbf{o}||_2$</li>
+</ul>
+
+<p>我们的目标是求解 $\frac{de}{d\mathbf{W}_1},\frac{de}{d\mathbf{W}_2}$。求解过程如下：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+\frac{de}{d\mathbf{o}} &=& \mathbf{o}-\mathbf{y} \\
+\frac{de}{d\mathbf{W}_2} &=& \frac{de}{d\mathbf{z_2}} \mathbf{h}^T \\
+&=& \frac{d\mathbf{o}^T}{d\mathbf{z}_2} \frac{de}{d\mathbf{o}} \mathbf{h}^T \\
+&=&  (\mathbf{o}-\mathbf{y})\mathbf{h}^T \\
+\frac{de}{d\mathbf{W}_1} &=& \frac{de}{d\mathbf{z_1}} \mathbf{x}^T \\
+&=& \frac{d\mathbf{h}^T}{d\mathbf{z}_1} \frac{d\mathbf{z}_2^T}{d\mathbf{h}} \frac{de}{d\mathbf{z}_2} \mathbf{x}^T \\
+&=& \text{diag}(\varphi'(z_{1_i})) \mathbf{W_2}^T \frac{de}{d\mathbf{z}_2} \mathbf{x}^T \\
+&=& \text{diag}(\varphi'(z_{1_i})) \mathbf{W_2}^T (\mathbf{o}-\mathbf{y}) \mathbf{x}^T
+\end{eqnarray*} %]]></script>
+
+<p>通过上面推导，我们可以得到逐层误差之间的关系。定义 $\delta_3=\mathbf{o}-\mathbf{y},\delta_2=\frac{de}{d\mathbf{z}_2},\delta_1=\frac{de}{d\mathbf{z}_1}$，则：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+\delta_2 &=& \delta_3 \\
+\delta_1 &=& \text{diag}(\varphi'(z_{1_i}))\mathbf{W}_2^T\delta_2
+\end{eqnarray*} %]]></script>
+
+<p>得到梯度后，可以利用随机梯度下降（Stochastic gradient descent）更新模型：</p>
+
+<ol>
+  <li>init $W_1, W_2$</li>
+  <li>for j=1 to $T$ <br />
+​    　for each sample $( \textbf{x}_i, y_i)$<br />
+​    　　calc   　$\frac{de}{d\mathbf{W}_1},\frac{de}{d\mathbf{W}_2}$<br />
+​    　　update　$\mathbf{W}_1 \leftarrow \mathbf{W}_1 - \gamma\frac{de}{d\mathbf{W}_1},\mathbf{W}_2 \leftarrow \mathbf{W}_2 - \gamma\frac{de}{d\mathbf{W}_2}$<br />
+​    　stop until convergence</li>
+</ol>
+
+<h2 id="3-numpy实现">3. Numpy实现</h2>
+
+<p>基于 MNIST 实现手写数字识别。</p>
+
+<p>设置三层全连接网络，输入层神经元数量为784，隐含层神经元数量为500，输出层神经元数量为10。</p>
+
+<p>注意隐含层激活函数为 ReLU，输出层激活函数为 Softmax ，重点关注下计算梯度的代码：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">e2</span> <span class="o">=</span> <span class="n">probs</span> <span class="o">-</span> <span class="n">labels</span>
+    <span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w2</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">e2</span><span class="p">)</span>
+    <span class="n">e1</span><span class="p">[</span><span class="n">h1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">dw2</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span> <span class="n">h1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">db2</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">e2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">dw1</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+    <span class="n">db1</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以看到<code class="highlighter-rouge">e2</code>对应 $\delta_2$，<code class="highlighter-rouge">e1</code>对应 $\delta_1$ 。</p>
+
+<p><a href="https://github.com/iworldtong/DeepLearning_note/blob/master/mnist_mlp_np_blog.py">完整代码</a></p>
+
+<h2 id="4-参考资料">4. 参考资料</h2>
+
+<ul>
+  <li>《矩阵分析与应用》张贤达</li>
+  <li><a href="https://zhuanlan.zhihu.com/p/25063314">机器学习中的矩阵/向量求导</a> —— 对矩阵求导的介绍很完整</li>
+</ul>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/11/08/greedy2dp/" data-toggle="tooltip" data-placement="top" title="课程安排问题——从一道Google面试题看动态规划与贪心算法的关系">
+                        Previous<br>
+                        <span>课程安排问题——从一道Google面试题看动态规划与贪心算法的关系</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href=""></a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    SVG: {
+      scale: 90
+    },
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true,
+    }
+  });
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG">
+</script>
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/iworldtong">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; iworld's Blog 2018
+                    <!-- <br>
+                    Powered by <a href="http://huangxuan.me">Hux Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'iworldtong.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "番剧的意义"
+title: "动漫的意义"
 subtitle: ''
 author: "iworld"
 header-style: text
