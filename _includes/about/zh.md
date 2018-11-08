@@ -14,4 +14,10 @@ Hey，我是木柯桐，目前在中科院自动化所学习计算机幻觉，�
 
 擅长MacOS、Windows、Linux等系统的开关机
 
+### 联系方式
+
+邮箱：[Gmail](iworldtong@gmail.com)
+
+网易云：[木柯桐](https://music.163.com/#/user/home?id=263330394)
+
 <br>
