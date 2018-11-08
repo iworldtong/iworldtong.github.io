@@ -3,7 +3,7 @@ layout: post
 title: "动漫的意义"
 subtitle: ''
 author: "iworld"
-header-style: text
+header-img: img/2018-11-07-anime-mean.jpg
 tags:
   - 二次元
 ---

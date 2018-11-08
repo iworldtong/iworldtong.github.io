@@ -3,7 +3,7 @@ layout: post
 title: "从矩阵微分的角度推导BP算法（附代码）"
 subtitle: '矩阵微分在深度学习中的应用'
 author: "iworld"
-header-style: text
+header-img: img/2018-11-09-matrix-differential-to-BP.jpg
 mathjax: true
 tags:
   - Deep Learning
@@ -106,11 +106,11 @@ $$
 
 **证明：**由雅可比矩阵的传递性可知
 
- 
+
 $$
 \frac{\partial \mathbf{f}}{\partial \mathbf{u}}=\frac{\partial \mathbf{f}}{\partial \mathbf{x}}\frac{\partial \mathbf{x}}{\partial \mathbf{u}}
 $$
- 
+
 
 再根据 $f$ 退化成实数时雅克⽐矩阵和函数导数的关系，有
 
