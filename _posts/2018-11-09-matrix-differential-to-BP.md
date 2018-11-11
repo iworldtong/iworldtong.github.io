@@ -214,7 +214,7 @@ def backward(probs, labels, x, h1, h2):
 
 可以看到`e2`对应 $\delta_2$，`e1`对应 $\delta_1$ 。
 
-[完整代码](https://github.com/iworldtong/DeepLearning_note/blob/master/mnist_mlp_np_blog.py)
+[完整代码](https://github.com/iworldtong/ML-and-DL-notes/blob/master/DL/mlp/mnist_mlp_np.py)
 
 ## 4. 参考资料
 
