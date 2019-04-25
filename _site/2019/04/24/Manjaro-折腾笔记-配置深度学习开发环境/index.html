@@ -11,27 +11,27 @@
     <meta name="theme-color" content="#000000">
     
     <!-- Open Graph -->
-    <meta property="og:title" content="动漫的意义 - 木柯桐的博客 | iworld's Blog">
+    <meta property="og:title" content="Manjaro 折腾笔记（配置深度学习开发环境） - 木柯桐的博客 | iworld's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="有人说: 补番完毕就像失去了一个好朋友。
+    <meta property="og:description" content="0 目录
 
 ">
     
-    <meta property="article:published_time" content="2018-11-07T00:00:00Z">
+    <meta property="article:published_time" content="2019-04-24T00:00:00Z">
     
     
     <meta property="article:author" content="iworld">
     
     
-    <meta property="article:tag" content="二次元">
+    <meta property="article:tag" content="Linux">
     
     
     <meta property="og:image" content="http://localhost:4000/img/avatar.jpg">
-    <meta property="og:url" content="http://localhost:4000/2018/11/07/anime-mean/">
+    <meta property="og:url" content="http://localhost:4000/2019/04/24/Manjaro-%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0-%E9%85%8D%E7%BD%AE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
     <meta property="og:site_name" content="木柯桐的博客 | iworld's Blog">
     
-    <title>动漫的意义 - 木柯桐的博客 | iworld's Blog</title>
+    <title>Manjaro 折腾笔记（配置深度学习开发环境） - 木柯桐的博客 | iworld's Blog</title>
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/pwa/manifest.json">
@@ -40,7 +40,7 @@
     <link rel="shortcut icon" href="/img/favicon.ico">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href="http://localhost:4000/2018/11/07/anime-mean/">
+    <link rel="canonical" href="http://localhost:4000/2019/04/24/Manjaro-%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0-%E9%85%8D%E7%BD%AE%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -182,7 +182,7 @@
 
     <!-- Image to hack wechat -->
 <!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
-<!-- <img src="/img/2018-11-07-anime-mean.jpg" width="0" height="0"> -->
+<!-- <img src="/img/2019-04-24-Manjaro 折腾笔记（配置深度学习开发环境）.jpg" width="0" height="0"> -->
 
 <!-- Post Header -->
 
@@ -191,7 +191,7 @@
 <style type="text/css">
     header.intro-header{
         position: relative;
-        background-image: url('/img/2018-11-07-anime-mean.jpg');
+        background-image: url('/img/2019-04-24-Manjaro 折腾笔记（配置深度学习开发环境）.jpg');
         background: ;
     }
 
@@ -208,13 +208,13 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83" title="二次元">二次元</a>
+                        <a class="tag" href="/archive/?tag=Linux" title="Linux">Linux</a>
                         
                     </div>
-                    <h1>动漫的意义</h1>
+                    <h1>Manjaro 折腾笔记（配置深度学习开发环境）</h1>
                     
                     <h2 class="subheading"></h2>
-                    <span class="meta">Posted by iworld on November 7, 2018</span>
+                    <span class="meta">Posted by iworld on April 24, 2019</span>
                 </div>
             </div>
         </div>
@@ -240,97 +240,228 @@
                 <!-- Multi-Lingual -->
                 
 
-				<p>有人说: 补番完毕就像失去了一个好朋友。</p>
+				<h3 id="0-目录">0 目录</h3>
 
-<p>是啊，在看番的时候，大家都会倾注自己的感情，把自己代入到二次元，即使只是“旁观者”，但是所有发生在二次元里的事我们都在见证着:不断认识和了解的伙伴、一起面对的事，快乐、高兴、忧愁、疑惑、难过、悲伤、生气、辛酸，都是和二次元里的伙伴们共同拥有的回忆。到了完结之时，那些难忘的人和事都要和我们说再见了，这是真的生离死别，我们也许永远都不会再相见了吧。</p>
-
-<p><br /></p>
-
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505300186/%E5%90%91%E5%BE%80_bzyzbl.png" /></p>
-
-<p><br /></p>
-
-<p>可是呢，大家并没有消失啊。</p>
+<ul>
+  <li><a href="#1">1.源镜像与系统更新</a></li>
+  <li><a href="#2">2.常用软件</a></li>
+  <li><a href="#3">3.深度学习环境</a></li>
+  <li><a href="#4">4.安装软件时可能遇到的问题</a></li>
+</ul>
 
 <p><br /></p>
 
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505298769/%E5%BC%80%E5%A7%8B_ij3out.png" /></p>
+<h3 id="1源镜像与系统更新"><span id="1">1.源镜像与系统更新</span></h3>
+
+<ul>
+  <li>
+    <h4 id="换源">换源</h4>
+
+    <p><strong>官方镜像源（包括 core， extra， community， multilib）</strong></p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>pacman-mirrors <span class="nt">-i</span> <span class="nt">-c</span> China <span class="nt">-m</span> rank //更新镜像排名，可以只留下清华源能令带宽跑满
+<span class="nb">sudo </span>pacman <span class="nt">-Syy</span> //更新数据源
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p><strong>archlinuxcn 源（中科大 ）</strong></p>
+
+    <p>在 <code class="highlighter-rouge">/etc/pacman.conf</code> 末尾添加两行：</p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="o">[</span>archlinuxcn]
+Server <span class="o">=</span> https://mirrors.ustc.edu.cn/archlinuxcn/<span class="nv">$arch</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>然后安装 <code class="highlighter-rouge">archlinuxcn-keyring</code> 包以导入GPG key</p>
+  </li>
+  <li>
+    <h4 id="更新系统">更新系统</h4>
+
+    <p><code class="highlighter-rouge">sudo pacman -Syyu</code></p>
+  </li>
+</ul>
 
 <p><br /></p>
 
-<p>他们并没有走，大家结下的羁绊，使我们更紧密地联系在一起——对的，他们已经向我们传达了心意，永远驻留在我们的记忆里，他们并没有走，他们一直都陪伴在我们的身边，鼓励我们，帮助我们，无时无刻。</p>
+<h3 id="2常用软件"><span id="2">2.常用软件</span></h3>
+
+<ul>
+  <li>
+    <h4 id="换包管理">换包管理</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>pacman <span class="nt">-S</span> yay		<span class="c"># yay不用sudo了</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="科学上网">科学上网</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> shadowsocks-qt5
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p><strong>配置终端走代理</strong></p>
+
+    <p>向 <code class="highlighter-rouge">~/.bashrc</code> 添加下面两行</p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="nb">alias </span><span class="nv">proxy</span><span class="o">=</span><span class="s2">"export all_proxy=socks5://127.0.0.1:1080"</span> <span class="c"># 自己修改代理端口</span>
+<span class="nb">alias </span><span class="nv">unproxy</span><span class="o">=</span><span class="s2">"unset all_proxy"</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="微信--tim">微信 &amp; TIM</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> deepin-wechat
+yay <span class="nt">-S</span> electronic-wechat  <span class="c"># wechat代替解决方案</span>
+yay <span class="nt">-S</span> deepin-wine-tim
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="网易云音乐">网易云音乐</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> netease-cloud-music
+yay <span class="nt">-S</span> iease-music <span class="c"># 第三方</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="docky">docky</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> docky
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="中文搜狗输入法">中文/搜狗输入法</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> fcitx fcitx-configtool fcitx-sogoupinyin <span class="c"># 安装sougou需要走代理</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>向 <code class="highlighter-rouge">~/.xprofile</code> 添加</p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="nb">export </span><span class="nv">GTK_IM_MODULE</span><span class="o">=</span>fcitx
+<span class="nb">export </span><span class="nv">QT_IM_MODULE</span><span class="o">=</span>fcitx 
+<span class="nb">export </span><span class="nv">XMODIFIERS</span><span class="o">=</span>@im<span class="o">=</span>fcitx
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>注销用户重新登录使	修改生效</p>
+  </li>
+  <li>
+    <h4 id="chrome浏览器">Chrome浏览器</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> google-chrome
+<span class="nb">source</span> ~/.bashrc
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>使修改生效</p>
+  </li>
+</ul>
 
 <p><br /></p>
 
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505299018/%E6%9C%8B%E5%8F%8B_zd4oy0.png" /></p>
+<h3 id="3深度学习环境"><span id="3">3.深度学习环境</span></h3>
+
+<p><strong>安装anaconda</strong>（清华源）</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> anaconda
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>添加环境变量，打开 <code class="highlighter-rouge">~/.bashrc</code> 写入</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>export PATH=/opt/anaconda/bin/:$PATH
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>添加清华源</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>安装硬件驱动</strong></p>
+
+<p>打开 Manjaro Settings Manager，点击硬件设定，点击 Auto Install Proprietary Driver</p>
+
+<p><strong>Tensorflow</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>conda install tensorflow-gpu
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>Pytorch</strong></p>
+
+<p>参考<a href="https://pytorch.org/">官网</a>安装命令（优先pip安装，condo install有可能会出现 No module named ‘torch’）</p>
 
 <p><br /></p>
 
-<p>他们也许属于过去，但他们早已经成为了我们的力量，鼓励着我们，帮助我们在人生的道路上向前看，向前走，去拥抱未来，拥抱美好的事物。</p>
+<h3 id="4安装软件时可能遇到的问题"><span id="4">4.安装软件时可能遇到的问题</span></h3>
 
-<p><br /></p>
+<ul>
+  <li>
+    <h4 id="archlinuxcn-keyring无法安装"><a href="https://bbs.archlinuxcn.org/viewtopic.php?id=4129">archlinuxcn-keyring无法安装</a></h4>
 
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505302431/%E5%90%91%E5%BE%802_uvyz1x.jpg" /></p>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>pacman <span class="nt">-Syu</span> haveged
+systemctl start haveged
+systemctl <span class="nb">enable </span>haveged
+  
+<span class="nb">rm</span> <span class="nt">-fr</span> /etc/pacman.d/gnupg
+pacman-key <span class="nt">--init</span>
+pacman-key <span class="nt">--populate</span> archlinux
+pacman-key <span class="nt">--populate</span> archlinuxcn
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="无法找到目标文件分割所需的-strip-二进制文件">无法找到目标文件分割所需的 strip 二进制文件</h4>
 
-<p><br /></p>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> <span class="nt">--needed</span> base-devel
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="一个或多个-pgp-签名无法校验">一个或多个 PGP 签名无法校验</h4>
 
-<p>到那时，我们也一定会再次遇上像他们一样的伙伴，给予我们再一次难忘的回忆。</p>
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>gpg <span class="nt">--recv-keys</span> &lt;提示的未知公共密钥&gt;
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+</ul>
 
-<p><br /></p>
-
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505301087/%E4%BC%99%E4%BC%B4_hukzgy.jpg" /></p>
-
-<p><br /></p>
-
-<p>然后我们又怀着同样的感恩之情，元气满满地，继续向着前走。没有他们，我觉得，我们是不可能做到的。</p>
-
-<p><br /></p>
-
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505302860/%E5%90%91%E5%BE%803_s8sxai.png" /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p>所以……</p>
-
-<p>如果以后……</p>
-
-<p>再相遇的话……</p>
-
-<p><br /></p>
-
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505300757/%E5%86%8D%E7%9B%B8%E9%81%87_nzhwfs.jpg" /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p><br /></p>
-
-<p>初次见面，请多指教！</p>
-
-<p><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505300757/%E4%BD%A0%E5%A5%BD_r1kn4q.jpg" /></p>
 
 
                 <hr style="visibility: hidden;">
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2018/11/08/greedy2dp/" data-toggle="tooltip" data-placement="top" title="课程安排问题——从一道Google面试题看动态规划与贪心算法的关系">
-                        Next<br>
-                        <span>课程安排问题——从一道Google面试题看动态规划与贪心算法的关系</span>
+                    <li class="previous">
+                        <a href="/2019/03/10/%E8%87%AA%E6%8E%A7%E5%8A%9B-%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0-%E5%BF%83%E7%90%86%E5%AD%A6/" data-toggle="tooltip" data-placement="top" title="《自控力》读书笔记（心理学）">
+                        Previous<br>
+                        <span>《自控力》读书笔记（心理学）</span>
                         </a>
                     </li>
+                    
                     
                 </ul>
                 <hr style="visibility: hidden;">
