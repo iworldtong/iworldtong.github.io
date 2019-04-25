@@ -5,8 +5,8 @@
     <description>世界再大，还是遇见了你</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 24 Apr 2019 12:21:47 +0800</pubDate>
-    <lastBuildDate>Wed, 24 Apr 2019 12:21:47 +0800</lastBuildDate>
+    <pubDate>Thu, 25 Apr 2019 13:47:45 +0800</pubDate>
+    <lastBuildDate>Thu, 25 Apr 2019 13:47:45 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -36,26 +36,32 @@
 &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;pacman &lt;span class=&quot;nt&quot;&gt;-Syy&lt;/span&gt; //更新数据源
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
 
-    &lt;p&gt;&lt;strong&gt;archlinuxcn 源（中科大 ）&lt;/strong&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;archlinuxcn 源&lt;/strong&gt;&lt;/p&gt;
 
-    &lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/pacman.conf&lt;/code&gt; 末尾添加两行：&lt;/p&gt;
+    &lt;p&gt;在 &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/pacman.conf&lt;/code&gt; 末尾添加下面两行（以清华源为例）&lt;/p&gt;
 
     &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 2
+3
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;archlinuxcn]
-Server &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; https://mirrors.ustc.edu.cn/archlinuxcn/&lt;span class=&quot;nv&quot;&gt;$arch&lt;/span&gt;
+Siglevel &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; Optional TrustedOnly
+Server &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/&lt;span class=&quot;nv&quot;&gt;$arch&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
 
     &lt;p&gt;然后安装 &lt;code class=&quot;highlighter-rouge&quot;&gt;archlinuxcn-keyring&lt;/code&gt; 包以导入GPG key&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;pacman &lt;span class=&quot;nt&quot;&gt;-Syy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;pacman &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; archlinuxcn-keyring
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;h4 id=&quot;更新系统&quot;&gt;更新系统&lt;/h4&gt;
 
-    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo pacman -Syyu&lt;/code&gt;&lt;/p&gt;
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;pacman &lt;span class=&quot;nt&quot;&gt;-Syyu&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;2常用软件&quot;&gt;&lt;span id=&quot;2&quot;&gt;2.常用软件&lt;/span&gt;&lt;/h3&gt;
 
@@ -65,6 +71,61 @@ Server &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; https://mirrors.ustc.edu.c
 
     &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;pacman &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; yay		&lt;span class=&quot;c&quot;&gt;# yay不用sudo了&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h4 id=&quot;微信--tim&quot;&gt;微信 &amp;amp; TIM&lt;/h4&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; deepin-wechat
+yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; electronic-wechat  &lt;span class=&quot;c&quot;&gt;# wechat代替解决方案&lt;/span&gt;
+yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; deepin.com.qq.office
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h4 id=&quot;网易云音乐--mpv&quot;&gt;网易云音乐 &amp;amp; MPV&lt;/h4&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; netease-cloud-music
+yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; iease-music &lt;span class=&quot;c&quot;&gt;# 第三方&lt;/span&gt;
+yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; mpv
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h4 id=&quot;chrome&quot;&gt;Chrome&lt;/h4&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; google-chrome
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h4 id=&quot;中文搜狗输入法&quot;&gt;中文/搜狗输入法&lt;/h4&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; fcitx fcitx-configtool fcitx-sogoupinyin
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;向 &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.xprofile&lt;/code&gt; 添加&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;GTK_IM_MODULE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;fcitx
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;QT_IM_MODULE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;fcitx 
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;XMODIFIERS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;@im&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;fcitx
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;&lt;strong&gt;注销用户&lt;/strong&gt;重新登录使修改生效&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h4 id=&quot;docky&quot;&gt;Docky&lt;/h4&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; docky
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
   &lt;li&gt;
@@ -83,67 +144,51 @@ Server &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; https://mirrors.ustc.edu.c
 &lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;export all_proxy=socks5://127.0.0.1:1080&quot;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 自己修改代理端口&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;unproxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;unset all_proxy&quot;&lt;/span&gt;
 &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;h4 id=&quot;微信--tim&quot;&gt;微信 &amp;amp; TIM&lt;/h4&gt;
-
-    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; deepin-wechat
-yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; electronic-wechat  &lt;span class=&quot;c&quot;&gt;# wechat代替解决方案&lt;/span&gt;
-yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; deepin-wine-tim
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;h4 id=&quot;网易云音乐&quot;&gt;网易云音乐&lt;/h4&gt;
-
-    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; netease-cloud-music
-yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; iease-music &lt;span class=&quot;c&quot;&gt;# 第三方&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;h4 id=&quot;docky&quot;&gt;docky&lt;/h4&gt;
-
-    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; docky
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;h4 id=&quot;中文搜狗输入法&quot;&gt;中文/搜狗输入法&lt;/h4&gt;
-
-    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; fcitx fcitx-configtool fcitx-sogoupinyin &lt;span class=&quot;c&quot;&gt;# 安装sougou需要走代理&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-
-    &lt;p&gt;向 &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.xprofile&lt;/code&gt; 添加&lt;/p&gt;
-
-    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;GTK_IM_MODULE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;fcitx
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;QT_IM_MODULE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;fcitx 
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;XMODIFIERS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;@im&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;fcitx
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-
-    &lt;p&gt;注销用户重新登录使	修改生效&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;h4 id=&quot;chrome浏览器&quot;&gt;Chrome浏览器&lt;/h4&gt;
-
-    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; google-chrome
-&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.bashrc
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
 
     &lt;p&gt;使修改生效&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; ~/.bashrc
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h4 id=&quot;conky系统监视&quot;&gt;Conky——系统监视&lt;/h4&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay conky
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;安装选择 &lt;code class=&quot;highlighter-rouge&quot;&gt;aur/conky-lua&lt;/code&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; conky-manager
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;刷新字体&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;fc-cache &lt;span class=&quot;nt&quot;&gt;-vf&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;配置文件（将network那个配置文件里面的网卡名，替换为自己的网卡名）&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;git clone https://github.com/9527tech/conkyrc.git .Conky
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; .Conky
+git checkout other_8t
+sh startconky.sh
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+
+    &lt;p&gt;开机自启动，写入&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.xprofile&lt;/code&gt;&lt;/p&gt;
+
+    &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;sh ~/.Conky/startconky.sh
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;3深度学习环境&quot;&gt;&lt;span id=&quot;3&quot;&gt;3.深度学习环境&lt;/span&gt;&lt;/h3&gt;
 
@@ -178,8 +223,6 @@ yay &lt;span class=&quot;nt&quot;&gt;-S&lt;/span&gt; iease-music &lt;span class=
 &lt;p&gt;&lt;strong&gt;Pytorch&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;参考&lt;a href=&quot;https://pytorch.org/&quot;&gt;官网&lt;/a&gt;安装命令（优先pip安装，condo install有可能会出现 No module named ‘torch’）&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;4安装软件时可能遇到的问题&quot;&gt;&lt;span id=&quot;4&quot;&gt;4.安装软件时可能遇到的问题&lt;/span&gt;&lt;/h3&gt;
 
