@@ -5,7 +5,7 @@ header-img: img/home-bg.jpg
 email: iworldtong@gmail.com
 description: "世界再大，还是遇见了你"
 keyword: "iworld, 木柯桐, 博客, 深度学习, 计算机视觉, 视频理解"
-url: "https://huangxuan.me"              # your host, for absolute URL
+url: "https://www.iworldtong.com"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
 
 # Publish posts or collection documents with a future date.
@@ -62,7 +62,7 @@ kramdown:
 # disqus_username: iworld
 
 # Netease settings
-netease_comment: false
+netease_comment: true
 
 
 

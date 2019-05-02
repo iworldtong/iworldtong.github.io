@@ -14,7 +14,7 @@
     <meta property="og:title" content="Manjaro 折腾笔记（配置深度学习开发环境） - 木柯桐的博客 | iworld's Blog">
     
     <meta property="og:type" content="article">
-    <meta property="og:description" content="0 目录
+    <meta property="og:description" content="完成效果：
 
 ">
     
@@ -240,7 +240,11 @@
                 <!-- Multi-Lingual -->
                 
 
-				<h3 id="0-目录">0 目录</h3>
+				<p>完成效果：</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1556290650/iblog/manjaro%20cfg/2019-04-26_22-48-11s1.png" /></div>
+
+<h3 id="0-目录">0 目录</h3>
 
 <ul>
   <li><a href="#1">1.源镜像与系统更新</a></li>
@@ -248,8 +252,6 @@
   <li><a href="#3">3.深度学习环境</a></li>
   <li><a href="#4">4.安装软件时可能遇到的问题</a></li>
 </ul>
-
-<p><br /></p>
 
 <h3 id="1源镜像与系统更新"><span id="1">1.源镜像与系统更新</span></h3>
 
@@ -381,6 +383,11 @@ yay <span class="nt">-S</span> mpv
 </pre></td></tr></tbody></table></code></pre></div>    </div>
   </li>
   <li>
+    <h4 id="baidupcs-go百度云网盘">BaiduPCS-Go——百度云网盘</h4>
+
+    <p><a href="https://github.com/iikira/BaiduPCS-Go/releases">下载</a>（<em>为防止被封号，推荐用测试账号登陆</em>）</p>
+  </li>
+  <li>
     <h4 id="conky系统监视">Conky——系统监视</h4>
 
     <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -399,7 +406,7 @@ yay <span class="nt">-S</span> mpv
 </pre></td><td class="rouge-code"><pre>fc-cache <span class="nt">-vf</span>
 </pre></td></tr></tbody></table></code></pre></div>    </div>
 
-    <p>配置文件（将network那个配置文件里面的网卡名，替换为自己的网卡名）</p>
+    <p>配置文件（将network那个配置文件里面的网卡名，替换为自己的网卡名，<code class="highlighter-rouge">cat /proc/net/dev</code>）</p>
 
     <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -416,6 +423,49 @@ sh startconky.sh
     <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>sh ~/.Conky/startconky.sh
 </pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <h4 id="oh-my-zsh">oh my zsh</h4>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>yay <span class="nt">-S</span> zsh git wget curl
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>安装oh my zsh，以下选一：</p>
+
+    <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c"># curl方式</span>
+<span class="nv">$ </span>sh <span class="nt">-c</span> <span class="s2">"</span><span class="k">$(</span>curl <span class="nt">-fsSL</span> https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh<span class="k">)</span><span class="s2">"</span>
+<span class="c"># wget方式</span>
+<span class="nv">$ </span>sh <span class="nt">-c</span> <span class="s2">"</span><span class="k">$(</span>wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh <span class="nt">-O</span> -<span class="k">)</span><span class="s2">"</span>
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>在 <code class="highlighter-rouge">~/.zshrc</code> 中找到 <code class="highlighter-rouge">ZSH_THEME="robbyrussell"</code> 修改主题</p>
+  </li>
+  <li>
+    <h4 id="gnome插件">Gnome插件</h4>
+
+    <p><a href="https://zhuanlan.zhihu.com/p/36265103">安装插件方法</a>，本地安装时需要重启Gnome Shell，Alt + F2 输入 r 。</p>
+
+    <ul>
+      <li>
+        <p><strong>Sound Input &amp; Output Device Chooser</strong>：声音设备选择</p>
+      </li>
+      <li><strong>Dynamic-Panel-Transparency</strong>：顶栏透明，<a href="https://github.com/rockon999/dynamic-panel-transparency">github</a></li>
+      <li><strong>Status Area Horizontal Spacing</strong>： 让顶栏更紧凑</li>
+      <li><strong>Random Wallpaper</strong>：自动切换壁纸</li>
+      <li><strong>Clipboard Indicator</strong>： 一个剪贴板</li>
+      <li><strong>Coverflow Alt-Tab</strong>： 更好的窗口切换</li>
+      <li><strong>Simple net speed</strong>：网速监测</li>
+      <li><strong>GnomeStatsPro</strong>：系统监视器</li>
+      <li><strong>Suspend Button</strong>：添加一个休眠按钮</li>
+      <li><strong>Proxy Switcher</strong>： 代理插件</li>
+      <li><strong>TopIcons Plus</strong>： 把托盘图标放到顶栏</li>
+      <li><strong>Caffeine</strong>： 防止自动挂起</li>
+    </ul>
   </li>
 </ul>
 
@@ -506,11 +556,22 @@ pacman-key <span class="nt">--populate</span> archlinuxcn
                     </li>
                     
                     
+                    <li class="next">
+                        <a href="/2019/05/02/%E6%AC%A2%E8%BF%8E%E5%85%89%E4%B8%B4%E7%93%A6%E5%B0%94%E5%93%88%E6%8B%89/" data-toggle="tooltip" data-placement="top" title="欢迎光临瓦尔哈拉——《VA-11 Hall-A》">
+                        Next<br>
+                        <span>欢迎光临瓦尔哈拉——《VA-11 Hall-A》</span>
+                        </a>
+                    </li>
+                    
                 </ul>
                 <hr style="visibility: hidden;">
 
                 
 
+                
+                <!-- 网易云跟帖 评论框 start -->
+                <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+                <!-- 网易云跟帖 评论框 end -->
                 
             </div>  
 
@@ -539,7 +600,7 @@ pacman-key <span class="nt">--populate</span> archlinuxcn
         </a>
         
         
-                <a data-sort="0004" 
+                <a data-sort="0005" 
                     href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83"
                     title="二次元"
                     rel="2">二次元
@@ -565,6 +626,20 @@ pacman-key <span class="nt">--populate</span> archlinuxcn
 <!-- add support for mathjax by voleking-->
 
 
+
+<!-- 网易云跟帖JS代码 start -->
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+  var cloudTieConfig = {
+    url: document.location.href, 
+    sourceId: "",
+    productKey: "de25fc98a6fe48b3bc8a7ae765da99a0",
+    target: "cloud-tie-wrapper"
+  };
+  var yunManualLoad = true;
+  Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+<!-- 网易云跟帖JS代码 end -->
 
 
 

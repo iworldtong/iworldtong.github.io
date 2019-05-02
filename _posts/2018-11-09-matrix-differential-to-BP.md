@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "从矩阵微分的角度推导BP算法（附代码）"
-subtitle: '矩阵微分在深度学习中的应用'
+subtitle: ''
 author: "iworld"
 header-img: img/2018-11-09-matrix-differential-to-BP.jpg
 mathjax: true
