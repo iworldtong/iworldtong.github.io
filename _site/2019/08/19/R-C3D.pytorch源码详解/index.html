@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="0rC5v1zVHWU93qDhTriIdP6JGbOnZ9177vNXXrry3gs" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界再大，还是遇见了你">
+    <meta name="keywords"  content="iworld, 木柯桐, 博客, 深度学习, 计算机视觉, 视频理解">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="R-C3D.pytorch源码详解 - 木柯桐的博客 | iworld's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="本文结合R-C3D原理及其Caffe实现，介绍了R-C3D.pytorch源代码的各部分功能。
+
+">
+    
+    <meta property="article:published_time" content="2019-08-19T00:00:00Z">
+    
+    
+    <meta property="article:author" content="iworld">
+    
+    
+    <meta property="article:tag" content="Deep Learning">
+    
+    <meta property="article:tag" content="Video Understanding">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar.jpg">
+    <meta property="og:url" content="http://localhost:4000/2019/08/19/R-C3D.pytorch%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3/">
+    <meta property="og:site_name" content="木柯桐的博客 | iworld's Blog">
+    
+    <title>R-C3D.pytorch源码详解 - 木柯桐的博客 | iworld's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/08/19/R-C3D.pytorch%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">iworld's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/pic/">pic</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/2019-08-19-R-C3D.pytorch源码详解.png" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/2019-08-19-R-C3D.pytorch源码详解.png');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=Deep+Learning" title="Deep Learning">Deep Learning</a>
+                        
+                        <a class="tag" href="/archive/?tag=Video+Understanding" title="Video Understanding">Video Understanding</a>
+                        
+                    </div>
+                    <h1>R-C3D.pytorch源码详解</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by iworld on August 19, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<p>本文结合<a href="https://arxiv.org/abs/1703.07814">R-C3D</a>原理及其<a href="https://github.com/VisionLearningGroup/R-C3D">Caffe实现</a>，介绍了<a href="https://github.com/sunnyxiaohu/R-C3D.pytorch">R-C3D.pytorch</a>源代码的各部分功能。</p>
+
+<h3 id="0目录">0.目录</h3>
+
+<ul>
+  <li><a href="#1">1.数据预处理</a></li>
+  <li><a href="#2">2.数据集加载</a></li>
+  <li><a href="#3">3.R-C3D框架</a></li>
+</ul>
+
+<h3 id="1数据预处理"><span id="1">1.数据预处理</span></h3>
+
+<p>目标：滑动窗法采样数据，生成pkl文件。</p>
+
+<p>在<code class="highlighter-rouge">preprocess</code>文件夹下，有分别对THUMOS14、ActivityNet和Charades三个数据集的预处理文件，文件名为<code class="highlighter-rouge">generate_roidb_training.py</code>和<code class="highlighter-rouge">generate_roidb_validation.py</code>。这里主要关注针对不同数据集，滑动窗的大小设置。预处理文件中有如下部分：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="c1"># for ActivityNet
+</span><span class="o">...</span>
+<span class="n">FPS</span> <span class="o">=</span> <span class="mi">25</span>
+<span class="o">...</span>
+<span class="n">WINS</span> <span class="o">=</span> <span class="p">[</span><span class="n">LENGTH</span> <span class="o">*</span> <span class="mi">8</span><span class="p">]</span> 
+<span class="o">...</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>论文根据不同数据集中行为片段的时长统计信息，设置对三个数据集采样的FPS分别为25、3和5。而一开始，分帧程序对所有视频的fps均为25（见<code class="highlighter-rouge">generate_frames.py</code>，这样比较通用，方便测试其他模型），因此需要进行一定转换。</p>
+
+<p>具体的取帧部分在<code class="highlighter-rouge">lib/roi_data_layer/minibatch.py</code>中的<code class="highlighter-rouge">_get_video_blob</code>函数中（详见后文介绍），帧之间的采样间隔step等于预处理文件中的stride。</p>
+
+<p>以ActivityNet为例，stride就是上面程序中的8。而25//8的采样率正好约为论文中的3fps，因此上面的WINS设置方式实际为<code class="highlighter-rouge"> WINS = [LENGTH * FPS // sample_fps] </code>，其中sample_fps为真正的采样率，需要根据不同数据集进行设置。</p>
+
+<h3 id="2数据集加载"><span id="2">2.数据集加载</span></h3>
+
+<p>主要涉及<code class="highlighter-rouge">lib/roi_data_layer</code>文件下的<code class="highlighter-rouge">roibatchLoader.py</code>和<code class="highlighter-rouge">minibatch.py</code>两个文件。</p>
+
+<p>对于<code class="highlighter-rouge">roibatchLoader.py</code>，其返回数据为一段滑动窗对应数据（窗内采样图像序列和窗标签，其中标签为（max_num_box, x1, x2, cls），表示对当前滑动窗所有符合条件的ground truth boxes，也即回归分类目标）。若当前符合条件的gt boxes数量不足max_num_box，则用0填充；多余则截断。</p>
+
+<p>对于<code class="highlighter-rouge">minibatch.py</code>，其输入为长度为1的滑动窗列表，即”Single batch only”，其中的random_scale_inds参数也只是选择一种窗口长度（<code class="highlighter-rouge">len(WINS)==1</code>）。</p>
+
+<p>在具体取帧时，<code class="highlighter-rouge">_get_video_blob</code>函数中设置了不同的采样方式（稀疏或均匀抽帧）：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="o">...</span>
+<span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">TEMP_SPARSE_SAMPLING</span><span class="p">:</span>       
+  <span class="k">if</span> <span class="n">phase</span> <span class="o">==</span> <span class="s">'train'</span><span class="p">:</span>
+    <span class="n">segment_offsets</span> <span class="o">=</span> <span class="n">npr</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">video_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">video_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="p">)))</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">segment_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">video_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">video_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="p">)))</span> <span class="o">+</span> <span class="n">step</span> <span class="o">//</span> <span class="mi">2</span>
+<span class="k">else</span><span class="p">:</span>            
+  <span class="n">segment_offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">video_info</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">video_info</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="p">)))</span>
+<span class="o">...</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>对每个滑动窗，对其framestamps以sample_fps进行采样，并添加偏移segment_offsets，由于一段滑动窗长度为<code class="highlighter-rouge">win = LENGTH * FPS // sample_fps</code>，抽帧的间隔为<code class="highlighter-rouge">step = FPS // sample_fps</code>，则输出的video大小为<code class="highlighter-rouge">(LENGTH, cfg.TRAIN.CROP_SIZE, cfg.TRAIN.CROP_SIZE, 3)</code>，若采得总帧数不足<code class="highlighter-rouge">LENGTH</code>（窗宽小于<code class="highlighter-rouge">LENGTH</code>，代表此时滑动窗口溢出视频边界）则以最后一帧向后复制。</p>
+
+<p>最终返回的data大小为<code class="highlighter-rouge">(1, channel, video_length, height, width)</code>。</p>
+
+<h3 id="3r-c3d框架"><span id="3">3.R-C3D框架</span></h3>
+
+<p>以C3D为例。</p>
+
+<p>R-C3D网络的初始化代码如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre>	<span class="c1"># initilize the network here.
+</span>    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">net</span> <span class="o">==</span> <span class="s">'c3d'</span><span class="p">:</span>
+        <span class="n">tdcnn_demo</span> <span class="o">=</span> <span class="n">c3d_tdcnn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">net</span> <span class="o">==</span> <span class="s">'res18'</span><span class="p">:</span>
+        <span class="n">tdcnn_demo</span> <span class="o">=</span> <span class="n">resnet_tdcnn</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">net</span> <span class="o">==</span> <span class="s">'res34'</span><span class="p">:</span>
+        <span class="n">tdcnn_demo</span> <span class="o">=</span> <span class="n">resnet_tdcnn</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">34</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">net</span> <span class="o">==</span> <span class="s">'res50'</span><span class="p">:</span>
+        <span class="n">tdcnn_demo</span> <span class="o">=</span> <span class="n">resnet_tdcnn</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">net</span> <span class="o">==</span> <span class="s">'eco'</span><span class="p">:</span>
+        <span class="n">tdcnn_demo</span> <span class="o">=</span> <span class="n">eco_tdcnn</span><span class="p">(</span><span class="n">pretrained</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">"network is not defined"</span><span class="p">)</span>
+
+    <span class="n">tdcnn_demo</span><span class="o">.</span><span class="n">create_architecture</span><span class="p">()</span> <span class="c1"># 初始化模型以及权重，见 lib/model/tdcnn/tdcnn.py
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>c3d_tdcnn继承自_TDCNN，主要作用是在tdcnn的基础上定义了下面四部分：</p>
+
+<ul>
+  <li><strong>self.RCNN_base</strong>：对输入视频提取特征图，取C3D base到conv5b为止（不含max pooling，C3D网络定义见<code class="highlighter-rouge">lib/model/tdcnn/c3d.py</code>），当输入大小为$(bsz, C, L, H, W)$时，对应的输出大小为$(bsz,512,L/8,H/16,W/16)$。</li>
+  <li><strong>self.RCNN_top</strong>：为C3D classifier，只取了第一个FC层（即fc6，包括ReLU与Dropout），输出为4096。</li>
+  <li><strong>self.RCNN_cls_score</strong>：输入4096维特征向量，得到分类得分。</li>
+  <li><strong>self.RCNN_twin_pred</strong>：输入4096维特征向量，得到每类的检测边界。</li>
+</ul>
+
+<p>_TDCNN主要定义了rpn的相关结构：</p>
+
+<ul>
+  <li>
+    <p><strong>self.RCNN_rpn</strong>
+定义见<code class="highlighter-rouge">lib/model/rpn/rpn.py</code>，输入self.RCNN_base得到的特征图，输出rois, rpn_cls_prob, rpn_twin_pred, self.rpn_loss_cls, self.rpn_loss_twin, self.rpn_label, self.rpn_loss_mask。</p>
+
+    <p>假设输入特征图大小为$(bsz, 512, 96, 7, 7)$，首先经过self.RPN_Conv1、self.RPN_Conv2和self.RPN_output_pool，输出rpn_output_pool大小为$(bsz, 512, 96, 1, 1)$，再进行后续处理。</p>
+
+    <ul>
+      <li>
+        <p><strong>self.RPN_cls_score</strong>：计算分类得分，对每一个time anchor（这里为96），有$2(bg/fg) \times 10 (anchors)$个输出，因此$(bsz, 512, 96, 1, 1) \rightarrow (bsz, 2*10, 96, 1, 1)$。</p>
+      </li>
+      <li>
+        <p><strong>self.RPN_twin_pred</strong>：计算坐标，有$2(coords）\times 10 (anchors)$个输出，因此$(bsz, 512, 96, 1, 1) \rightarrow (bsz, 2*10, 96, 1, 1)$。</p>
+      </li>
+      <li>
+        <p><strong>self.RPN_proposal</strong></p>
+
+        <p>通过前面得到的rpn_cls_prob和twin_pred，计算rois。</p>
+      </li>
+      <li>
+        <p><strong>self.RPN_anchor_target</strong></p>
+
+        <p>训练阶段使用，得到self.rpn_label，self.rpn_loss_cls，self.rpn_loss_twin。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>self.RCNN_proposal_target</strong></p>
+
+    <p>定义见<code class="highlighter-rouge">lib/model/rpn/proposal_target_layer_cascade.py</code>，用于训练阶段。</p>
+  </li>
+  <li>
+    <p><strong>self.RCNN_roi_temporal_pool</strong></p>
+  </li>
+  <li>
+    <p><strong>self.RCNN_attention</strong></p>
+  </li>
+</ul>
+
+<p>R-C3D前向计算的主要代码如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="rouge-code"><pre><span class="n">feats_map</span> <span class="o">=</span> <span class="n">RCNN_base</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<span class="n">rois</span><span class="p">,</span> <span class="n">rpn_loss_cls</span><span class="p">,</span> <span class="n">rpn_loss_twin</span> <span class="o">=</span> <span class="n">RCNN_rpn</span><span class="p">(</span><span class="n">feats_map</span><span class="p">)</span>
+
+<span class="c1"># if it is training phase, then use ground truth twins for refining
+</span><span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+  <span class="n">rois</span><span class="p">,</span> <span class="n">rois_label</span><span class="p">,</span> <span class="n">rois_target</span><span class="p">,</span> <span class="n">rois_inside_ws</span><span class="p">,</span> <span class="n">rois_outside_ws</span> <span class="o">=</span> <span class="n">RCNN_proposal_target</span><span class="p">(</span><span class="n">rois</span><span class="p">,</span> <span class="n">gt_twins</span><span class="p">)</span>
+
+<span class="c1"># do roi pooling based on predicted rois
+</span><span class="k">if</span> <span class="n">is_pool</span><span class="p">:</span>
+  <span class="n">pooled_feat</span> <span class="o">=</span> <span class="n">RCNN_roi_temporal_pool</span><span class="p">(</span><span class="n">base_feat</span><span class="p">,</span> <span class="n">rois</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+  
+<span class="k">if</span> <span class="n">USE_ATTENTION</span><span class="p">:</span>
+  <span class="n">pooled_feat</span> <span class="o">=</span> <span class="n">RCNN_attention</span><span class="p">(</span><span class="n">pooled_feat</span><span class="p">)</span> 
+  
+<span class="n">pooled_feat</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">pooled_feat</span><span class="p">)</span>
+<span class="n">pooled_feat</span> <span class="o">=</span> <span class="n">RCNN_top</span><span class="p">(</span><span class="n">pooled_feat</span><span class="p">)</span>
+
+<span class="n">cls_score</span> <span class="o">=</span> <span class="n">RCNN_cls_score</span><span class="p">(</span><span class="n">pooled_feat</span><span class="p">)</span>
+<span class="n">cls_prob</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">cls_score</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">twin_pred</span> <span class="o">=</span> <span class="n">RCNN_twin_pred</span><span class="p">(</span><span class="n">pooled_feat</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+  <span class="n">compute</span> <span class="n">RCNN_loss_cls</span><span class="p">,</span> <span class="n">RCNN_loss_twin</span> <span class="n">according</span> <span class="n">to</span> <span class="n">twin_pred</span>
+
+<span class="k">if</span> <span class="n">training</span><span class="p">:</span>        
+  <span class="k">return</span> <span class="n">rois</span><span class="p">,</span> <span class="n">cls_prob</span><span class="p">,</span> <span class="n">twin_pred</span><span class="p">,</span> <span class="n">rpn_loss_cls</span><span class="p">,</span> <span class="n">rpn_loss_twin</span><span class="p">,</span> <span class="n">RCNN_loss_cls</span><span class="p">,</span> <span class="n">RCNN_loss_twin</span><span class="p">,</span> <span class="n">rois_label</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="k">return</span> <span class="n">rois</span><span class="p">,</span> <span class="n">cls_prob</span><span class="p">,</span> <span class="n">twin_pred</span> 
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/05/19/%E5%90%8D%E4%B8%BA%E7%89%A9%E7%90%86-%E8%AF%BB%E4%BD%9C%E4%B8%AD%E4%BA%8C/" data-toggle="tooltip" data-placement="top" title="名为物理，读作中二">
+                        Previous<br>
+                        <span>名为物理，读作中二</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+
+                
+                <!-- 网易云跟帖 评论框 start -->
+                <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+                <!-- 网易云跟帖 评论框 end -->
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83"
+                    title="二次元"
+                    rel="2">二次元</a>
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=Deep+Learning"
+                    title="Deep Learning"
+                    rel="2">Deep Learning
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href=""></a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    SVG: {
+      scale: 90
+    },
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true,
+    }
+  });
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG">
+</script>
+
+
+
+<!-- 网易云跟帖JS代码 start -->
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+  var cloudTieConfig = {
+    url: document.location.href, 
+    sourceId: "",
+    productKey: "de25fc98a6fe48b3bc8a7ae765da99a0",
+    target: "cloud-tie-wrapper"
+  };
+  var yunManualLoad = true;
+  Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+<!-- 网易云跟帖JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/iworldtong">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; iworld's Blog 2019
+                    <!-- <br>
+                    Powered by <a href="http://huangxuan.me">Hux Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'iworldtong.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
