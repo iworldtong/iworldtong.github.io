@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="0rC5v1zVHWU93qDhTriIdP6JGbOnZ9177vNXXrry3gs" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界再大，还是遇见了你">
+    <meta name="keywords"  content="iworld, 木柯桐, 博客, 深度学习, 计算机视觉, 视频理解">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="【论文整理】Temporal Sentence Localization in Video方向近期总结 - 木柯桐的博客 | iworld's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="0.Introduce
+
+">
+    
+    <meta property="article:published_time" content="2019-09-09T00:00:00Z">
+    
+    
+    <meta property="article:author" content="iworld">
+    
+    
+    <meta property="article:tag" content="Deep Learning">
+    
+    <meta property="article:tag" content="Video Understanding">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar.jpg">
+    <meta property="og:url" content="http://localhost:4000/2019/09/09/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-Temporal-Sentence-Localization-in-Video%E6%96%B9%E5%90%91%E8%BF%91%E6%9C%9F%E6%80%BB%E7%BB%93/">
+    <meta property="og:site_name" content="木柯桐的博客 | iworld's Blog">
+    
+    <title>【论文整理】Temporal Sentence Localization in Video方向近期总结 - 木柯桐的博客 | iworld's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/09/09/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-Temporal-Sentence-Localization-in-Video%E6%96%B9%E5%90%91%E8%BF%91%E6%9C%9F%E6%80%BB%E7%BB%93/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">iworld's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/pic/">pic</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/2019-09-09-【论文整理】Temporal Sentence Localization in Video方向近期总结.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/2019-09-09-【论文整理】Temporal Sentence Localization in Video方向近期总结.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=Deep+Learning" title="Deep Learning">Deep Learning</a>
+                        
+                        <a class="tag" href="/archive/?tag=Video+Understanding" title="Video Understanding">Video Understanding</a>
+                        
+                    </div>
+                    <h1>【论文整理】Temporal Sentence Localization in Video方向近期总结</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by iworld on September 9, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h3 id="0introduce">0.Introduce</h3>
+
+<p>Temporal Sentence Localization in Video，该任务内容为给定一个query（包含对activity的描述），在一段视频中找到描述动作（事件）发生的起止时间，如下图所示：</p>
+
+<div align="center"><img height="200" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1554267644/Awesome%20Language%20Moment%20Retrieval/TALL_-_2.png" /></div>
+
+<p>该任务在17年被提出，经过两年发展，目前主流工作大致分为以下三种思路：</p>
+
+<ol>
+  <li><a href="#1">Proposal-based</a></li>
+  <li><a href="#2">Proposal-free</a></li>
+  <li><a href="#3">Reinforcement-learning-based</a></li>
+</ol>
+
+<h3 id="1proposal-based"><span id="1">1.P</span>roposal-based</h3>
+
+<h3 id="2proposal-free"><span id="2">2.Proposal-free</span></h3>
+
+<p>上面介绍的方法都是<strong>“scan and localize”</strong>这种结构的，该框架在早期虽然取得了一定效果，但目前看来仍存在很多局限性，下面列举几条比较明显的缺点：</p>
+
+<ol>
+  <li>用滑动窗等方法产生video clip之间是独立的，打断了隐含的时序结构和视频整体的全局信息，<strong>不能有效利用整个视频序列</strong>；</li>
+  <li>一些方法将整个句子编码成一个全局特征（coarse feature），其中<strong>某些对定位至关重要的句子信息容易被忽略或未被充分挖掘</strong>；</li>
+  <li>为提高性能，滑动窗法往往需要对视频密集采样，造成<strong>极大的计算冗余</strong>；</li>
+  <li>预定义的clips，使得<strong>预测结果变长扩展变得困难</strong>；</li>
+  <li>。。。。</li>
+</ol>
+
+<h4 id="21-ablr">2.1 ABLR</h4>
+
+<p><a href="https://arxiv.org/abs/1804.07014">《To Find Where You Talk: Temporal Sentence Localization in Video with Attention Based Location Regression》</a>，发表于AAAI19。</p>
+
+<p>本文主要贡献如下：</p>
+
+<ul>
+  <li>直接根据句子对整个视频预测起止时间；</li>
+  <li>提出了一种multi-modal co-attention机制</li>
+</ul>
+
+<p>模型框架如下：</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-1.png" /></div>
+<p>为了使不同视频片段之间能够建立关联，将视频均分为$N_{split}$个clip分别得到C3D特征后继续送给Bi-LSTM。之后进行注意力计算，其计算公式如下：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned} \mathbf{H} &=\tanh \left(\mathbf{U}_{z} \mathbf{Z}+\left(\mathbf{U}_{g} \mathbf{g}\right) \mathbf{1}^{T}+\mathbf{b}_{a} \mathbf{1}^{T}\right) \\ \mathbf{a}^{z} &=\operatorname{softmax}\left(\mathbf{u}_{a}^{T} \mathbf{H}\right) \\ \tilde{\mathbf{z}} &=\sum a_{j}^{z} \mathbf{z}_{j} \end{aligned} %]]></script>
+
+<p>Multi-Modal Co-Attention Interaction过程共有三步：</p>
+
+<ol>
+  <li><strong>“Where to look”</strong>，对视频进行注意力加权，$\mathbf{Z}=\mathbf{V},\mathbf{g}=mean_pool(\mathbf{S})$</li>
+  <li><strong>“Which words to guide”</strong>，根据加权后的视频，对句子注意力加权，$\mathbf{Z}=\mathbf{S},\mathbf{g}=\widetilde{v}$</li>
+  <li>根据加权后的句子特征，再次对视频进行注意力加权，$\mathbf{Z}=\mathbf{V}_a,\mathbf{g}=\widetilde{s}$</li>
+</ol>
+
+<p>最终进行坐标预测时作者设计了两种计算方式：</p>
+
+<ol>
+  <li><strong>Attention weight based regression</strong>：直接用注意力权重$\mathbf{a}^V$输入FC输出坐标</li>
+  <li><strong>Attention feature based regression</strong>：将加权拼接后的$[\widetilde{v}||\widetilde{s}]$送到一双层FC输出坐标</li>
+</ol>
+
+<p>为了增强事件内部的clip注意力权重，作者还设计了一种attention calibration loss（见下式），与reg loss一起构成总的损失函数。</p>
+
+<script type="math/tex; mode=display">L_{c a l}=-\sum_{i=1}^{K} \frac{\sum_{j=1}^{M} m_{i, j} \log \left(a_{j}^{V_{i}}\right)}{\sum_{j=1}^{M} m_{i, j}}</script>
+
+<p>在模型完整（full）的情况下，前者效果更好：</p>
+
+<div align="center"><img height="300" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-2.png" /></div>
+
+<p>同时实验也说明了这种Proposal-free的方法更加高效：</p>
+
+<div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-3.png" /></div>
+
+<p><strong>Note</strong>：本文提出的注意力机制比较繁琐，有优化的空间。</p>
+
+<h4 id="22-excl">2.2 ExCL</h4>
+
+<p><a href="https://arxiv.org/abs/1904.02755">《ExCL: Extractive Clip Localization Using Natural Language Descriptions》</a>，发表于NAACL19。</p>
+
+<p>本文通过text和video两模态之间的交互来直接预测起止时间，text特征使用text Bi-LSTM最后的隐含层状态$\mathbf{h}^T$，具体有如下三种多模态交互方式：</p>
+
+<div align="center"><img height="350" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-1.png" /></div>
+
+<ul>
+  <li>
+    <p><strong>MLP predictor</strong>：在每一时间步，使用拼接的$[\mathbf{h}_t^V|\mathbf{h}^T]$，输入MLP分别得到$S_{start}(t),S_{end}(t)$</p>
+  </li>
+  <li>
+    <p><strong>Tied LSTM predictor</strong>：上述拼接的特征首先经过一个Bi-LSTM，得到$\mathbf{h}_t^P$，将$[\mathbf{h}_t^P|\mathbf{h}_t^P|\mathbf{h}^T]$送给MLP</p>
+  </li>
+  <li>
+    <p><strong>Conditioned-LSTM predictor</strong>：由于前面两方法没有考虑$S_{start}(t)$与$S_{end}(t)$的时间次序关系，因此在计算结束时间时，引入起始时间的信息，以期使输出更加合理，公式如下：</p>
+
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned} \mathbf{h}_{t}^{P_{0}} &=\mathrm{LSTM}_{\text {start }}\left(\left[\mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right], \mathbf{h}_{t-1}^{P_{0}}\right) \\ \mathbf{h}_{t}^{P_{1}} &=\mathrm{LSTM}_{\text {end }}\left(\mathbf{h}_{t}^{P_{0}}, \mathbf{h}_{t-1}^{P_{1}}\right) \\ S_{\text {start }}(t) &=\mathbf{W}_{s}\left(\left[\mathbf{h}_{t}^{P_{0}} ; \mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right]\right)+\mathbf{b}_{s} \\ S_{\text {end }}(t) &=\mathbf{W}_{e}\left(\left[\mathbf{h}_{t}^{P_{1}} ; \mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right]\right)+\mathbf{b}_{e} \end{aligned} %]]></script>
+  </li>
+</ul>
+
+<p>实验结果如下：</p>
+
+<div align="center"><img height="400" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-2.png" /></div>
+
+<h4 id="23-proposal-free-with-guided-attention">2.3 Proposal-free with Guided Attention</h4>
+
+<p><a href="https://arxiv.org/abs/1908.07236">《Proposal-free Temporal Moment Localization of a Natural-Language Query in Video using Guided Attention》</a>，目前在Arxiv。</p>
+
+<p>本文主要贡献有三点：</p>
+
+<ul>
+  <li>A dynamic filter融合多模态特征，目的是根据给定的句子，动态的对视频特征进行过滤；</li>
+  <li>一种新的损失函数，指导模型关注视频中最相关的部分；</li>
+  <li>使用soft labels建模标签的模糊性。</li>
+</ul>
+
+<p>模型整体结构如下（编码句子特征时使用mean pool）：</p>
+
+<div align="center"><img height="300" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-1.png" /></div>
+
+<p>Guided Attention计算公式如下（$\mathbf{G}$为视频特征）：</p>
+
+<script type="math/tex; mode=display">\begin{array}{l}
+{A=\operatorname{softmax}\left(\frac{G^{\top} \theta(\overline{h})}{\sqrt{n}}\right) \in \mathbb{R}^{n}} \\ 
+{\overline{G}=A \odot G \in \mathbb{R}^{n \times d}} \\
+
+{其中\ \theta(x)=\tanh \left(W_{\theta} x+b_{\theta}\right) \in \mathbb{R}^{d}}
+\end{array}</script>
+
+<p>作者假设segments外部的视频更不可能对训练有帮助，因此设计att loss使外部的注意力更小（类似的思想见ABLR）：</p>
+
+<script type="math/tex; mode=display">L_{a t t}=-\sum_{i=1}^{n}\left(1-\delta_{\tau^{s} \leq i \leq \tau^{e}}\right) \log \left(1-a_{i}\right)</script>
+
+<p>考虑到即使对人来说，识别一段事件发生的起止时间也是非常模糊的，有很大的主观成分，因此作者使用了soft labels，针对概率分布进行优化。</p>
+
+<p>设$\hat{\boldsymbol{\tau}}^{s}, \hat{\boldsymbol{\tau}}^{e} \in \mathbb{R}^{n}$是得到的预测分布，${\boldsymbol{\tau}}^{s}, {\boldsymbol{\tau}}^{e}$是真实标签分布，则有$\boldsymbol{\tau}^{s} \sim \mathcal{N}\left(\tau^{s}, 1\right) \in \mathbb{R}^{n}，\boldsymbol{\tau}^{s} \sim \mathcal{N}\left(\tau^{e}, 1\right) \in \mathbb{R}^{n}$，使用<strong>KL散度</strong>进行优化：</p>
+
+<script type="math/tex; mode=display">L_{K L}=D_{\mathrm{KL}}\left(\hat{\tau}^{s} \| \tau^{s}\right)+D_{\mathrm{KL}}\left(\hat{\tau}^{e} \| \tau^{e}\right)</script>
+
+<p>最终损失函数：</p>
+
+<script type="math/tex; mode=display">L o s s=L_{K L}+L_{a t t}</script>
+
+<p>实验结果：</p>
+
+<div align="center"><img height="400" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-2.png" /></div>
+
+<p>实验说明了soft labels确实有效：</p>
+
+<div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568088783/iblog/LMR%20summary/others-3.png" /></div>
+
+<h3 id="3reinforcement-learning-based"><span id="3">3.Reinforcement-learning-based</span></h3>
+
+<p>强化学习的思路同样也是为了解决proposal-based方法对长视频提取密集、冗余的clip特征。</p>
+
+<div align="center"><img height="250" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188044/iblog/LMR%20summary/LMR-RL-1.png" /></div>
+
+<h4 id="31-tripnet">3.1 TripNet</h4>
+
+<p><a href="https://arxiv.org/abs/1904.09936">《Tripping through time: Efficient Localization of Activities in Videos》</a>，Arxiv。</p>
+
+<blockquote>
+  <p>We are motivated by human annotators who observe a short clip and make a decision to skip forward or backward in the video by some number of frames, until they can narrow in on the target clip.</p>
+</blockquote>
+
+<p>人在做此项任务时，往往首先从视频开始粗略的看，在此过程中采样到一些列稀疏的且与描述相关的帧，之后再进行frame-by-frame的定位。受此启发，本文提出了一个端到端、gated-attention的强化学习框架。主要思想是先初始化一个clip，根据当前状态计算当前策略，调整窗口直至靠近目标片段。</p>
+
+<p>模型分为两个主要部分：</p>
+
+<ul>
+  <li><strong>the state processing module</strong>：计算当前状态的visual-linguistic编码特征</li>
+  <li><strong>the policy learning module</strong>：生成action policy</li>
+</ul>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-1.png" /></div>
+<p>计算状态$s_t$使用了注意力的形式（见state processing module），注意作者在提取visual feature时使用的是C3D+mean_pool。</p>
+
+<p>使用全连接网络计算value与policy。为了使模型尽快定位到目标片段，value中的reward除了计算当前窗口与标签的IOU，还添加了一个<strong>随搜索步数$t$增长的负奖励</strong>。对于policy，作者定义了7种动作（$W_{start},W_{end}$分别向前/向后移动$N/5,N/10$，一秒范围的帧或终止），policy输出的就是当前动作在该动作空间中的概率分布。</p>
+
+<p>实验结果：</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-24.png" /></div>
+<p>一些搜索过程统计与可视化：</p>
+
+<div align="center"><img height="600" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-5.png" /></div>
+
+<p>效率验证：</p>
+
+<div align="center"><img height="120" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-6.png" /></div>
+
+<p><strong>Note</strong>：计算当前状态时只考虑了当前窗口内的视频特征，没有考虑全局特征。</p>
+
+<h4 id="32-sm-rl">3.2 SM-RL</h4>
+
+<p><a href="http://openaccess.thecvf.com/content_CVPR_2019/papers/Wang_Language-Driven_Temporal_Activity_Localization_A_Semantic_Matching_Reinforcement_Learning_Model_CVPR_2019_paper.pdf">《Language-driven Temporal Activity Localization: A Semantic Matching Reinforcement Learning Model》</a>，发表于CVPR19。</p>
+
+<p>video与sentence之间有着很大的语义鸿沟，但考虑到sentence中往往有一些semantic concept（如actor，action和object等），为了通过语义层面使video与sentence之间更加容易匹配，作者提出了一种基于强化学习的semantic matching方法。</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568171060/iblog/LMR%20summary/SM-RL-1.png" /></div>
+<p>在计算semantic concept时作者对比了<strong>multi-label classification based model</strong>（通过描述建立标签，如nouns，verbs等）与<strong>faster r-cnn based model</strong>（在visual gnome上预训练）两种生成semantic的方法，后者效果更优。</p>
+
+<p>损失函数对比了<strong>boundary regression loss</strong>与<strong>frame-level regression loss</strong>，以下为实验结果。</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568171060/iblog/LMR%20summary/SM-RL-2.png" /></div>
+<p><strong>Note</strong>：有点像视频描述中<a href="https://arxiv.org/abs/1811.02765v1">topic-embed</a>模型，semantic标签预测的准确性可能对模型性能影响很大。</p>
+
+<h4 id="33-read-watch-and-move">3.3 Read, Watch, and Move</h4>
+
+<p><a href="https://arxiv.org/abs/1901.06829">《Read, Watch, and Move: Reinforcement Learning for Temporally Grounding Natural Language Descriptions in Videos》</a>，发表于AAAI19。</p>
+
+<p>本文模型与TripNet较为相似，模型框架如下：</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-1.png" /></div>
+<p>计算当前状态时，除了局部特征，还考虑了整个视频的全局特征。此外，作者实验发现加入location feature可以有效提高指标。（见observation network）</p>
+
+<p>对强化学习，在第$t$步，如果当前的tIoU增大，则给一个正奖励；减小则无；当tIoU为负值时（即预测起始时间在结束时间之后），给负奖励。一般来说，策略网络搜索的步数更多，结果可能会更加精确，但随之而来的计算代价也会增大。为缓解这个问题，作者又设置了随执行步数增大而增大的惩罚。则第$t$步的reward计算公式如下：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+r_{t}=\left\{\begin{array}{ll}{1-\phi * t,} & {t I o U^{(t)}>t I o U^{(t-1)} \geq 0} \\ {-\phi * t,} & {0 \leq t I o U^{(t)} \leq t \operatorname{IoU}^{(t-1)}} \\ {-1-\phi * t,} & {\text { otherwise }}\end{array}\right. %]]></script>
+
+<p>值得注意的是，为了使模型学习到更好的state vector，作者将<strong>supervised learning</strong>（L1 tIoU regression loss + L1 location regression loss） 与<strong>reinforcement learning</strong>（actor-critic algorithm）相结合，组成一个<strong>multi-task learning</strong>框架，提高模型性能。</p>
+
+<p>实验结果：</p>
+
+<div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-2.png" /></div>
+
+<p>对比实验：</p>
+
+<div align="center"><img width="350" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-3.png" />
+<img width="350" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-4.png" /></div>
+
+<p>最后作者分析了location feature、监督学习中两个不同损失对指标的影响：</p>
+
+<div align="center"><img height="200" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-5.png" /></div>
+
+<p><strong>Note</strong>：observation network融合不同特征的方法还有待挖掘。</p>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/08/19/R-C3D.pytorch%E6%BA%90%E7%A0%81%E8%AF%A6%E8%A7%A3/" data-toggle="tooltip" data-placement="top" title="R-C3D.pytorch源码详解">
+                        Previous<br>
+                        <span>R-C3D.pytorch源码详解</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+
+                
+                <!-- 网易云跟帖 评论框 start -->
+                <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+                <!-- 网易云跟帖 评论框 end -->
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0009" 
+                    href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83"
+                    title="二次元"
+                    rel="2">二次元</a>
+        
+                <a data-sort="0008" 
+                    href="/archive/?tag=Deep+Learning"
+                    title="Deep Learning"
+                    rel="3">Deep Learning</a>
+        
+                <a data-sort="0009" 
+                    href="/archive/?tag=Video+Understanding"
+                    title="Video Understanding"
+                    rel="2">Video Understanding
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href=""></a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    SVG: {
+      scale: 90
+    },
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true,
+    }
+  });
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG">
+</script>
+
+
+
+<!-- 网易云跟帖JS代码 start -->
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+  var cloudTieConfig = {
+    url: document.location.href, 
+    sourceId: "",
+    productKey: "de25fc98a6fe48b3bc8a7ae765da99a0",
+    target: "cloud-tie-wrapper"
+  };
+  var yunManualLoad = true;
+  Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+<!-- 网易云跟帖JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/iworldtong">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; iworld's Blog 2019
+                    <!-- <br>
+                    Powered by <a href="http://huangxuan.me">Hux Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'iworldtong.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

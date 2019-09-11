@@ -5,9 +5,258 @@
     <description>世界再大，还是遇见了你</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sat, 17 Aug 2019 22:55:48 +0800</pubDate>
-    <lastBuildDate>Sat, 17 Aug 2019 22:55:48 +0800</lastBuildDate>
+    <pubDate>Wed, 11 Sep 2019 17:25:04 +0800</pubDate>
+    <lastBuildDate>Wed, 11 Sep 2019 17:25:04 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>【论文整理】Temporal Sentence Localization in Video方向近期总结</title>
+        <description>&lt;h3 id=&quot;0introduce&quot;&gt;0.Introduce&lt;/h3&gt;
+
+&lt;p&gt;Temporal Sentence Localization in Video，该任务内容为给定一个query（包含对activity的描述），在一段视频中找到描述动作（事件）发生的起止时间，如下图所示：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;200&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1554267644/Awesome%20Language%20Moment%20Retrieval/TALL_-_2.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;该任务在17年被提出，经过两年发展，目前主流工作大致分为以下三种思路：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#1&quot;&gt;Proposal-based&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#2&quot;&gt;Proposal-free&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#3&quot;&gt;Reinforcement-learning-based&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;1proposal-based&quot;&gt;&lt;span id=&quot;1&quot;&gt;1.P&lt;/span&gt;roposal-based&lt;/h3&gt;
+
+&lt;h3 id=&quot;2proposal-free&quot;&gt;&lt;span id=&quot;2&quot;&gt;2.Proposal-free&lt;/span&gt;&lt;/h3&gt;
+
+&lt;p&gt;上面介绍的方法都是&lt;strong&gt;“scan and localize”&lt;/strong&gt;这种结构的，该框架在早期虽然取得了一定效果，但目前看来仍存在很多局限性，下面列举几条比较明显的缺点：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;用滑动窗等方法产生video clip之间是独立的，打断了隐含的时序结构和视频整体的全局信息，&lt;strong&gt;不能有效利用整个视频序列&lt;/strong&gt;；&lt;/li&gt;
+  &lt;li&gt;一些方法将整个句子编码成一个全局特征（coarse feature），其中&lt;strong&gt;某些对定位至关重要的句子信息容易被忽略或未被充分挖掘&lt;/strong&gt;；&lt;/li&gt;
+  &lt;li&gt;为提高性能，滑动窗法往往需要对视频密集采样，造成&lt;strong&gt;极大的计算冗余&lt;/strong&gt;；&lt;/li&gt;
+  &lt;li&gt;预定义的clips，使得&lt;strong&gt;预测结果变长扩展变得困难&lt;/strong&gt;；&lt;/li&gt;
+  &lt;li&gt;。。。。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;21-ablr&quot;&gt;2.1 ABLR&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1804.07014&quot;&gt;《To Find Where You Talk: Temporal Sentence Localization in Video with Attention Based Location Regression》&lt;/a&gt;，发表于AAAI19。&lt;/p&gt;
+
+&lt;p&gt;本文主要贡献如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;直接根据句子对整个视频预测起止时间；&lt;/li&gt;
+  &lt;li&gt;提出了一种multi-modal co-attention机制&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;模型框架如下：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-1.png&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;为了使不同视频片段之间能够建立关联，将视频均分为$N_{split}$个clip分别得到C3D特征后继续送给Bi-LSTM。之后进行注意力计算，其计算公式如下：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{aligned} \mathbf{H} &amp;=\tanh \left(\mathbf{U}_{z} \mathbf{Z}+\left(\mathbf{U}_{g} \mathbf{g}\right) \mathbf{1}^{T}+\mathbf{b}_{a} \mathbf{1}^{T}\right) \\ \mathbf{a}^{z} &amp;=\operatorname{softmax}\left(\mathbf{u}_{a}^{T} \mathbf{H}\right) \\ \tilde{\mathbf{z}} &amp;=\sum a_{j}^{z} \mathbf{z}_{j} \end{aligned} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Multi-Modal Co-Attention Interaction过程共有三步：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;“Where to look”&lt;/strong&gt;，对视频进行注意力加权，$\mathbf{Z}=\mathbf{V},\mathbf{g}=mean_pool(\mathbf{S})$&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;“Which words to guide”&lt;/strong&gt;，根据加权后的视频，对句子注意力加权，$\mathbf{Z}=\mathbf{S},\mathbf{g}=\widetilde{v}$&lt;/li&gt;
+  &lt;li&gt;根据加权后的句子特征，再次对视频进行注意力加权，$\mathbf{Z}=\mathbf{V}_a,\mathbf{g}=\widetilde{s}$&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;最终进行坐标预测时作者设计了两种计算方式：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Attention weight based regression&lt;/strong&gt;：直接用注意力权重$\mathbf{a}^V$输入FC输出坐标&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Attention feature based regression&lt;/strong&gt;：将加权拼接后的$[\widetilde{v}||\widetilde{s}]$送到一双层FC输出坐标&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;为了增强事件内部的clip注意力权重，作者还设计了一种attention calibration loss（见下式），与reg loss一起构成总的损失函数。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_{c a l}=-\sum_{i=1}^{K} \frac{\sum_{j=1}^{M} m_{i, j} \log \left(a_{j}^{V_{i}}\right)}{\sum_{j=1}^{M} m_{i, j}}&lt;/script&gt;
+
+&lt;p&gt;在模型完整（full）的情况下，前者效果更好：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;300&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-2.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;同时实验也说明了这种Proposal-free的方法更加高效：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;150&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-3.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;：本文提出的注意力机制比较繁琐，有优化的空间。&lt;/p&gt;
+
+&lt;h4 id=&quot;22-excl&quot;&gt;2.2 ExCL&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1904.02755&quot;&gt;《ExCL: Extractive Clip Localization Using Natural Language Descriptions》&lt;/a&gt;，发表于NAACL19。&lt;/p&gt;
+
+&lt;p&gt;本文通过text和video两模态之间的交互来直接预测起止时间，text特征使用text Bi-LSTM最后的隐含层状态$\mathbf{h}^T$，具体有如下三种多模态交互方式：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;350&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-1.png&quot; /&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;MLP predictor&lt;/strong&gt;：在每一时间步，使用拼接的$[\mathbf{h}_t^V|\mathbf{h}^T]$，输入MLP分别得到$S_{start}(t),S_{end}(t)$&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Tied LSTM predictor&lt;/strong&gt;：上述拼接的特征首先经过一个Bi-LSTM，得到$\mathbf{h}_t^P$，将$[\mathbf{h}_t^P|\mathbf{h}_t^P|\mathbf{h}^T]$送给MLP&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Conditioned-LSTM predictor&lt;/strong&gt;：由于前面两方法没有考虑$S_{start}(t)$与$S_{end}(t)$的时间次序关系，因此在计算结束时间时，引入起始时间的信息，以期使输出更加合理，公式如下：&lt;/p&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{aligned} \mathbf{h}_{t}^{P_{0}} &amp;=\mathrm{LSTM}_{\text {start }}\left(\left[\mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right], \mathbf{h}_{t-1}^{P_{0}}\right) \\ \mathbf{h}_{t}^{P_{1}} &amp;=\mathrm{LSTM}_{\text {end }}\left(\mathbf{h}_{t}^{P_{0}}, \mathbf{h}_{t-1}^{P_{1}}\right) \\ S_{\text {start }}(t) &amp;=\mathbf{W}_{s}\left(\left[\mathbf{h}_{t}^{P_{0}} ; \mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right]\right)+\mathbf{b}_{s} \\ S_{\text {end }}(t) &amp;=\mathbf{W}_{e}\left(\left[\mathbf{h}_{t}^{P_{1}} ; \mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right]\right)+\mathbf{b}_{e} \end{aligned} %]]&gt;&lt;/script&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;实验结果如下：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;400&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-2.png&quot; /&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;23-proposal-free-with-guided-attention&quot;&gt;2.3 Proposal-free with Guided Attention&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1908.07236&quot;&gt;《Proposal-free Temporal Moment Localization of a Natural-Language Query in Video using Guided Attention》&lt;/a&gt;，目前在Arxiv。&lt;/p&gt;
+
+&lt;p&gt;本文主要贡献有三点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A dynamic filter融合多模态特征，目的是根据给定的句子，动态的对视频特征进行过滤；&lt;/li&gt;
+  &lt;li&gt;一种新的损失函数，指导模型关注视频中最相关的部分；&lt;/li&gt;
+  &lt;li&gt;使用soft labels建模标签的模糊性。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;模型整体结构如下（编码句子特征时使用mean pool）：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;300&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-1.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;Guided Attention计算公式如下（$\mathbf{G}$为视频特征）：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{array}{l}
+{A=\operatorname{softmax}\left(\frac{G^{\top} \theta(\overline{h})}{\sqrt{n}}\right) \in \mathbb{R}^{n}} \\ 
+{\overline{G}=A \odot G \in \mathbb{R}^{n \times d}} \\
+
+{其中\ \theta(x)=\tanh \left(W_{\theta} x+b_{\theta}\right) \in \mathbb{R}^{d}}
+\end{array}&lt;/script&gt;
+
+&lt;p&gt;作者假设segments外部的视频更不可能对训练有帮助，因此设计att loss使外部的注意力更小（类似的思想见ABLR）：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_{a t t}=-\sum_{i=1}^{n}\left(1-\delta_{\tau^{s} \leq i \leq \tau^{e}}\right) \log \left(1-a_{i}\right)&lt;/script&gt;
+
+&lt;p&gt;考虑到即使对人来说，识别一段事件发生的起止时间也是非常模糊的，有很大的主观成分，因此作者使用了soft labels，针对概率分布进行优化。&lt;/p&gt;
+
+&lt;p&gt;设$\hat{\boldsymbol{\tau}}^{s}, \hat{\boldsymbol{\tau}}^{e} \in \mathbb{R}^{n}$是得到的预测分布，${\boldsymbol{\tau}}^{s}, {\boldsymbol{\tau}}^{e}$是真实标签分布，则有$\boldsymbol{\tau}^{s} \sim \mathcal{N}\left(\tau^{s}, 1\right) \in \mathbb{R}^{n}，\boldsymbol{\tau}^{s} \sim \mathcal{N}\left(\tau^{e}, 1\right) \in \mathbb{R}^{n}$，使用&lt;strong&gt;KL散度&lt;/strong&gt;进行优化：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L_{K L}=D_{\mathrm{KL}}\left(\hat{\tau}^{s} \| \tau^{s}\right)+D_{\mathrm{KL}}\left(\hat{\tau}^{e} \| \tau^{e}\right)&lt;/script&gt;
+
+&lt;p&gt;最终损失函数：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L o s s=L_{K L}+L_{a t t}&lt;/script&gt;
+
+&lt;p&gt;实验结果：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;400&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-2.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;实验说明了soft labels确实有效：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;150&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568088783/iblog/LMR%20summary/others-3.png&quot; /&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;3reinforcement-learning-based&quot;&gt;&lt;span id=&quot;3&quot;&gt;3.Reinforcement-learning-based&lt;/span&gt;&lt;/h3&gt;
+
+&lt;p&gt;强化学习的思路同样也是为了解决proposal-based方法对长视频提取密集、冗余的clip特征。&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;250&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188044/iblog/LMR%20summary/LMR-RL-1.png&quot; /&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;31-tripnet&quot;&gt;3.1 TripNet&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1904.09936&quot;&gt;《Tripping through time: Efficient Localization of Activities in Videos》&lt;/a&gt;，Arxiv。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;We are motivated by human annotators who observe a short clip and make a decision to skip forward or backward in the video by some number of frames, until they can narrow in on the target clip.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;人在做此项任务时，往往首先从视频开始粗略的看，在此过程中采样到一些列稀疏的且与描述相关的帧，之后再进行frame-by-frame的定位。受此启发，本文提出了一个端到端、gated-attention的强化学习框架。主要思想是先初始化一个clip，根据当前状态计算当前策略，调整窗口直至靠近目标片段。&lt;/p&gt;
+
+&lt;p&gt;模型分为两个主要部分：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;the state processing module&lt;/strong&gt;：计算当前状态的visual-linguistic编码特征&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;the policy learning module&lt;/strong&gt;：生成action policy&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-1.png&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;计算状态$s_t$使用了注意力的形式（见state processing module），注意作者在提取visual feature时使用的是C3D+mean_pool。&lt;/p&gt;
+
+&lt;p&gt;使用全连接网络计算value与policy。为了使模型尽快定位到目标片段，value中的reward除了计算当前窗口与标签的IOU，还添加了一个&lt;strong&gt;随搜索步数$t$增长的负奖励&lt;/strong&gt;。对于policy，作者定义了7种动作（$W_{start},W_{end}$分别向前/向后移动$N/5,N/10$，一秒范围的帧或终止），policy输出的就是当前动作在该动作空间中的概率分布。&lt;/p&gt;
+
+&lt;p&gt;实验结果：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-24.png&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;一些搜索过程统计与可视化：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;600&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-5.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;效率验证：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;120&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-6.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;：计算当前状态时只考虑了当前窗口内的视频特征，没有考虑全局特征。&lt;/p&gt;
+
+&lt;h4 id=&quot;32-sm-rl&quot;&gt;3.2 SM-RL&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://openaccess.thecvf.com/content_CVPR_2019/papers/Wang_Language-Driven_Temporal_Activity_Localization_A_Semantic_Matching_Reinforcement_Learning_Model_CVPR_2019_paper.pdf&quot;&gt;《Language-driven Temporal Activity Localization: A Semantic Matching Reinforcement Learning Model》&lt;/a&gt;，发表于CVPR19。&lt;/p&gt;
+
+&lt;p&gt;video与sentence之间有着很大的语义鸿沟，但考虑到sentence中往往有一些semantic concept（如actor，action和object等），为了通过语义层面使video与sentence之间更加容易匹配，作者提出了一种基于强化学习的semantic matching方法。&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568171060/iblog/LMR%20summary/SM-RL-1.png&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;在计算semantic concept时作者对比了&lt;strong&gt;multi-label classification based model&lt;/strong&gt;（通过描述建立标签，如nouns，verbs等）与&lt;strong&gt;faster r-cnn based model&lt;/strong&gt;（在visual gnome上预训练）两种生成semantic的方法，后者效果更优。&lt;/p&gt;
+
+&lt;p&gt;损失函数对比了&lt;strong&gt;boundary regression loss&lt;/strong&gt;与&lt;strong&gt;frame-level regression loss&lt;/strong&gt;，以下为实验结果。&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568171060/iblog/LMR%20summary/SM-RL-2.png&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;：有点像视频描述中&lt;a href=&quot;https://arxiv.org/abs/1811.02765v1&quot;&gt;topic-embed&lt;/a&gt;模型，semantic标签预测的准确性可能对模型性能影响很大。&lt;/p&gt;
+
+&lt;h4 id=&quot;33-read-watch-and-move&quot;&gt;3.3 Read, Watch, and Move&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1901.06829&quot;&gt;《Read, Watch, and Move: Reinforcement Learning for Temporally Grounding Natural Language Descriptions in Videos》&lt;/a&gt;，发表于AAAI19。&lt;/p&gt;
+
+&lt;p&gt;本文模型与TripNet较为相似，模型框架如下：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-1.png&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;计算当前状态时，除了局部特征，还考虑了整个视频的全局特征。此外，作者实验发现加入location feature可以有效提高指标。（见observation network）&lt;/p&gt;
+
+&lt;p&gt;对强化学习，在第$t$步，如果当前的tIoU增大，则给一个正奖励；减小则无；当tIoU为负值时（即预测起始时间在结束时间之后），给负奖励。一般来说，策略网络搜索的步数更多，结果可能会更加精确，但随之而来的计算代价也会增大。为缓解这个问题，作者又设置了随执行步数增大而增大的惩罚。则第$t$步的reward计算公式如下：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+r_{t}=\left\{\begin{array}{ll}{1-\phi * t,} &amp; {t I o U^{(t)}&gt;t I o U^{(t-1)} \geq 0} \\ {-\phi * t,} &amp; {0 \leq t I o U^{(t)} \leq t \operatorname{IoU}^{(t-1)}} \\ {-1-\phi * t,} &amp; {\text { otherwise }}\end{array}\right. %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;值得注意的是，为了使模型学习到更好的state vector，作者将&lt;strong&gt;supervised learning&lt;/strong&gt;（L1 tIoU regression loss + L1 location regression loss） 与&lt;strong&gt;reinforcement learning&lt;/strong&gt;（actor-critic algorithm）相结合，组成一个&lt;strong&gt;multi-task learning&lt;/strong&gt;框架，提高模型性能。&lt;/p&gt;
+
+&lt;p&gt;实验结果：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;150&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-2.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;对比实验：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img width=&quot;350&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-3.png&quot; /&gt;
+&lt;img width=&quot;350&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-4.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;最后作者分析了location feature、监督学习中两个不同损失对指标的影响：&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img height=&quot;200&quot; src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-5.png&quot; /&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;：observation network融合不同特征的方法还有待挖掘。&lt;/p&gt;
+</description>
+        <pubDate>Mon, 09 Sep 2019 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2019/09/09/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-Temporal-Sentence-Localization-in-Video%E6%96%B9%E5%90%91%E8%BF%91%E6%9C%9F%E6%80%BB%E7%BB%93/</link>
+        <guid isPermaLink="true">http://localhost:4000/2019/09/09/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-Temporal-Sentence-Localization-in-Video%E6%96%B9%E5%90%91%E8%BF%91%E6%9C%9F%E6%80%BB%E7%BB%93/</guid>
+        
+        <category>Deep Learning</category>
+        
+        <category>Video Understanding</category>
+        
+        
+      </item>
     
       <item>
         <title>R-C3D.pytorch源码详解</title>
@@ -2071,97 +2320,6 @@ OPT(i)=\max \left \{ \begin{aligned} &amp;OPT(pre(i)) + W_i&amp; \quad \text{安
         <guid isPermaLink="true">http://localhost:4000/2018/11/08/greedy2dp/</guid>
         
         <category>算法</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>动漫的意义</title>
-        <description>&lt;p&gt;有人说: 补番完毕就像失去了一个好朋友。&lt;/p&gt;
-
-&lt;p&gt;是啊，在看番的时候，大家都会倾注自己的感情，把自己代入到二次元，即使只是“旁观者”，但是所有发生在二次元里的事我们都在见证着:不断认识和了解的伙伴、一起面对的事，快乐、高兴、忧愁、疑惑、难过、悲伤、生气、辛酸，都是和二次元里的伙伴们共同拥有的回忆。到了完结之时，那些难忘的人和事都要和我们说再见了，这是真的生离死别，我们也许永远都不会再相见了吧。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505300186/%E5%90%91%E5%BE%80_bzyzbl.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;可是呢，大家并没有消失啊。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505298769/%E5%BC%80%E5%A7%8B_ij3out.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;他们并没有走，大家结下的羁绊，使我们更紧密地联系在一起——对的，他们已经向我们传达了心意，永远驻留在我们的记忆里，他们并没有走，他们一直都陪伴在我们的身边，鼓励我们，帮助我们，无时无刻。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505299018/%E6%9C%8B%E5%8F%8B_zd4oy0.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;他们也许属于过去，但他们早已经成为了我们的力量，鼓励着我们，帮助我们在人生的道路上向前看，向前走，去拥抱未来，拥抱美好的事物。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505302431/%E5%90%91%E5%BE%802_uvyz1x.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;到那时，我们也一定会再次遇上像他们一样的伙伴，给予我们再一次难忘的回忆。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505301087/%E4%BC%99%E4%BC%B4_hukzgy.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;然后我们又怀着同样的感恩之情，元气满满地，继续向着前走。没有他们，我觉得，我们是不可能做到的。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505302860/%E5%90%91%E5%BE%803_s8sxai.png&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;所以……&lt;/p&gt;
-
-&lt;p&gt;如果以后……&lt;/p&gt;
-
-&lt;p&gt;再相遇的话……&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505300757/%E5%86%8D%E7%9B%B8%E9%81%87_nzhwfs.jpg&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;初次见面，请多指教！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://res.cloudinary.com/dzu6x6nqi/image/upload/v1505300757/%E4%BD%A0%E5%A5%BD_r1kn4q.jpg&quot; /&gt;&lt;/p&gt;
-</description>
-        <pubDate>Wed, 07 Nov 2018 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/2018/11/07/anime-mean/</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/11/07/anime-mean/</guid>
-        
-        <category>二次元</category>
         
         
       </item>
