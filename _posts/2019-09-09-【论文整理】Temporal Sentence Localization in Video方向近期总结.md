@@ -48,24 +48,20 @@ Temporal Sentence Localization in Video，该任务内容为给定一个query（
 将query信息作为注意力，嵌入到类似R-C3D的proposal生成网络中去。
 
 <div align="center"><img height="200px"  src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-1.png"></div>
-
 除此之外作者还设计了多任务损失，添加了重新生成query的损失。
 
 <div align="center"><img height="200px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-2.png"></div>
-
 #### 1.4 MAN
 
 为解决一下两类misalignment问题，提出了利用graph convolution挖掘clip之间的关系。
 
 <div align="center"><img height="400px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291516/iblog/LMR%20summary/man-1.png"></div>
-
 网络框架：
 
 <div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-2.png"></div>
 作者可视化了根据图卷积计算出的clip之间关系的例子：
 
 <div align="center"><img height="350px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-3.png"></div>
-
 #### 1.5 CMIN
 
 通过如下依存句法关系对sentence建图，使用graph convolution提取文本特征。
@@ -74,7 +70,6 @@ Temporal Sentence Localization in Video，该任务内容为给定一个query（
 同时使用multi-head self attention提取视频特征，模型框架如下：
 
 <div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291525/iblog/LMR%20summary/cmin-2.png" ></div>
-
 
 ### <span id="2">2.Proposal-free</span>
 
@@ -128,6 +123,8 @@ $$
 在模型完整（full）的情况下，前者效果更好：
 
 <div align="center"><img height="300"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-2.png"></div>
+其实计算出的注意力直接关系到哪些clip是包含在sentence语义内的，因此直接输入attention取得了最高的效果。
+
 同时实验也说明了这种Proposal-free的方法更加高效：
 
 <div align="center"><img height="150"  src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-3.png"></div>
