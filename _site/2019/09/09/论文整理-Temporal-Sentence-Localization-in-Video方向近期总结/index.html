@@ -251,7 +251,6 @@
 <p>Temporal Sentence Localization in Video，该任务内容为给定一个query（包含对activity的描述），在一段视频中找到描述动作（事件）发生的起止时间，如下图所示：</p>
 
 <div align="center"><img height="200" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1554267644/Awesome%20Language%20Moment%20Retrieval/TALL_-_2.png" /></div>
-
 <p>该任务在17年被提出，经过两年发展，目前主流工作大致分为以下三种思路：</p>
 
 <ol>
@@ -261,6 +260,56 @@
 </ol>
 
 <h3 id="1proposal-based"><span id="1">1.P</span>roposal-based</h3>
+
+<p>为解决这种根据描述定位的任务，一个比较直观想法是多模态匹配。即用滑动窗对整个视频提取clips，选候选clip中相似度最高的作为预测结果，同时为了使定位更加精确，除分类损失还需要有回归损失，对clip进行微调。这种方式比较有代表性的是CTRL、MCN、ACL-K等。</p>
+
+<p>由于滑动窗法计算量比较大，之后有人提出了QSPN，其思想是在生成proposal的时候结合query信息，可以大量减少无关proposal的生成。该模型结合R-C3D，使其在生成proposal的时候引入query信息进行指导，这实际上是Faster-RCNN思想的迁移。</p>
+
+<p>之后图卷积开始被瞩目，大量应用于各个领域。考虑到描述中存在“the second time”、“after”等具有高层时序关系的关键词，仅仅局限于某一段就会丢失这种时序的结构信息，因此需要考虑clip之间的关系，而这种关系的建模非常适用于图卷积的框架。受此启发，有研究者提出了MAN，通过迭代、残差的图卷积结构挖掘clip之间的关系。</p>
+
+<p>除video特征外，sentence中同样包含着很多对定位至关重要的信息，如何有效挖掘这种linguistic特征也是一个亟需解决的问题。TMN从语法树的角度动态推理视频中的关系；CMIN利用依存句法构建图，利用图卷积提取描述特征；TCMN直接将sentence解析成树，提出了一种Tree Attention Network。</p>
+
+<h4 id="11-ctrl">1.1 CTRL</h4>
+
+<p>主要思想是将编码后的视觉、文本特征映射到一个子空间中，语义匹配的pairs在此空间中相似度会比较高。注意作者在编码视觉特征（central clip）时，还计算了相邻的context特征作为补充。</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/ctrl-1.png" /></div>
+<h4 id="12-acl-k">1.2 ACL-K</h4>
+
+<p>该模型是对CTRL模型的改进，提出了一个action concept的概念，并将此特征与描述中的verb-obj pairs的semantic concepts进行匹配，以此提高性能。</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/acl-k-1.png" /></div>
+<h4 id="13-qspn">1.3 QSPN</h4>
+
+<p>将query信息作为注意力，嵌入到类似R-C3D的proposal生成网络中去。</p>
+
+<div align="center"><img height="200px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-1.png" /></div>
+
+<p>除此之外作者还设计了多任务损失，添加了重新生成query的损失。</p>
+
+<div align="center"><img height="200px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-2.png" /></div>
+
+<h4 id="14-man">1.4 MAN</h4>
+
+<p>为解决一下两类misalignment问题，提出了利用graph convolution挖掘clip之间的关系。</p>
+
+<div align="center"><img height="400px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291516/iblog/LMR%20summary/man-1.png" /></div>
+
+<p>网络框架：</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-2.png" /></div>
+<p>作者可视化了根据图卷积计算出的clip之间关系的例子：</p>
+
+<div align="center"><img height="350px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-3.png" /></div>
+
+<h4 id="15-cmin">1.5 CMIN</h4>
+
+<p>通过如下依存句法关系对sentence建图，使用graph convolution提取文本特征。</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291525/iblog/LMR%20summary/cmin-1.png" /></div>
+<p>同时使用multi-head self attention提取视频特征，模型框架如下：</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291525/iblog/LMR%20summary/cmin-2.png" /></div>
 
 <h3 id="2proposal-free"><span id="2">2.Proposal-free</span></h3>
 
@@ -315,11 +364,9 @@
 <p>在模型完整（full）的情况下，前者效果更好：</p>
 
 <div align="center"><img height="300" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-2.png" /></div>
-
 <p>同时实验也说明了这种Proposal-free的方法更加高效：</p>
 
 <div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-3.png" /></div>
-
 <p><strong>Note</strong>：本文提出的注意力机制比较繁琐，有优化的空间。</p>
 
 <h4 id="22-excl">2.2 ExCL</h4>
@@ -329,13 +376,12 @@
 <p>本文通过text和video两模态之间的交互来直接预测起止时间，text特征使用text Bi-LSTM最后的隐含层状态$\mathbf{h}^T$，具体有如下三种多模态交互方式：</p>
 
 <div align="center"><img height="350" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-1.png" /></div>
-
 <ul>
   <li>
     <p><strong>MLP predictor</strong>：在每一时间步，使用拼接的$[\mathbf{h}_t^V|\mathbf{h}^T]$，输入MLP分别得到$S_{start}(t),S_{end}(t)$</p>
   </li>
   <li>
-    <p><strong>Tied LSTM predictor</strong>：上述拼接的特征首先经过一个Bi-LSTM，得到$\mathbf{h}_t^P$，将$[\mathbf{h}_t^P|\mathbf{h}_t^P|\mathbf{h}^T]$送给MLP</p>
+    <p><strong>Tied LSTM predictor</strong>：上述拼接的特征首先经过一个Bi-LSTM，得到$\mathbf{h}_t^P$，将$[\mathbf{h}_t^P|\mathbf{h}_t^V|\mathbf{h}^T]$送给MLP</p>
   </li>
   <li>
     <p><strong>Conditioned-LSTM predictor</strong>：由于前面两方法没有考虑$S_{start}(t)$与$S_{end}(t)$的时间次序关系，因此在计算结束时间时，引入起始时间的信息，以期使输出更加合理，公式如下：</p>
@@ -348,7 +394,6 @@
 <p>实验结果如下：</p>
 
 <div align="center"><img height="400" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-2.png" /></div>
-
 <h4 id="23-proposal-free-with-guided-attention">2.3 Proposal-free with Guided Attention</h4>
 
 <p><a href="https://arxiv.org/abs/1908.07236">《Proposal-free Temporal Moment Localization of a Natural-Language Query in Video using Guided Attention》</a>，目前在Arxiv。</p>
@@ -364,7 +409,6 @@
 <p>模型整体结构如下（编码句子特征时使用mean pool）：</p>
 
 <div align="center"><img height="300" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-1.png" /></div>
-
 <p>Guided Attention计算公式如下（$\mathbf{G}$为视频特征）：</p>
 
 <script type="math/tex; mode=display">\begin{array}{l}
@@ -391,17 +435,14 @@
 <p>实验结果：</p>
 
 <div align="center"><img height="400" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-2.png" /></div>
-
 <p>实验说明了soft labels确实有效：</p>
 
 <div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568088783/iblog/LMR%20summary/others-3.png" /></div>
-
 <h3 id="3reinforcement-learning-based"><span id="3">3.Reinforcement-learning-based</span></h3>
 
 <p>强化学习的思路同样也是为了解决proposal-based方法对长视频提取密集、冗余的clip特征。</p>
 
 <div align="center"><img height="250" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188044/iblog/LMR%20summary/LMR-RL-1.png" /></div>
-
 <h4 id="31-tripnet">3.1 TripNet</h4>
 
 <p><a href="https://arxiv.org/abs/1904.09936">《Tripping through time: Efficient Localization of Activities in Videos》</a>，Arxiv。</p>
@@ -430,11 +471,9 @@
 <p>一些搜索过程统计与可视化：</p>
 
 <div align="center"><img height="600" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-5.png" /></div>
-
 <p>效率验证：</p>
 
 <div align="center"><img height="120" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-6.png" /></div>
-
 <p><strong>Note</strong>：计算当前状态时只考虑了当前窗口内的视频特征，没有考虑全局特征。</p>
 
 <h4 id="32-sm-rl">3.2 SM-RL</h4>
@@ -470,7 +509,6 @@ r_{t}=\left\{\begin{array}{ll}{1-\phi * t,} & {t I o U^{(t)}>t I o U^{(t-1)} \ge
 <p>实验结果：</p>
 
 <div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-2.png" /></div>
-
 <p>对比实验：</p>
 
 <div align="center"><img width="350" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-3.png" />
@@ -479,7 +517,6 @@ r_{t}=\left\{\begin{array}{ll}{1-\phi * t,} & {t I o U^{(t)}>t I o U^{(t-1)} \ge
 <p>最后作者分析了location feature、监督学习中两个不同损失对指标的影响：</p>
 
 <div align="center"><img height="200" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-5.png" /></div>
-
 <p><strong>Note</strong>：observation network融合不同特征的方法还有待挖掘。</p>
 
 
