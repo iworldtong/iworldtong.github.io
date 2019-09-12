@@ -25,7 +25,59 @@ Temporal Sentence Localization in Video，该任务内容为给定一个query（
 
 ### <span id="1">1.P</span>roposal-based
 
+为解决这种根据描述定位的任务，一个比较直观想法是多模态匹配。即用滑动窗对整个视频提取clips，选候选clip中相似度最高的作为预测结果，同时为了使定位更加精确，除分类损失还需要有回归损失，对clip进行微调。这种方式比较有代表性的是CTRL、MCN、ACL-K等。
 
+由于滑动窗法计算量比较大，之后有人提出了QSPN，其思想是在生成proposal的时候结合query信息，可以大量减少无关proposal的生成。该模型结合R-C3D，使其在生成proposal的时候引入query信息进行指导，这实际上是Faster-RCNN思想的迁移。
+
+之后图卷积开始被瞩目，大量应用于各个领域。考虑到描述中存在“the second time”、“after”等具有高层时序关系的关键词，仅仅局限于某一段就会丢失这种时序的结构信息，因此需要考虑clip之间的关系，而这种关系的建模非常适用于图卷积的框架。受此启发，有研究者提出了MAN，通过迭代、残差的图卷积结构挖掘clip之间的关系。
+
+除video特征外，sentence中同样包含着很多对定位至关重要的信息，如何有效挖掘这种linguistic特征也是一个亟需解决的问题。TMN从语法树的角度动态推理视频中的关系；CMIN利用依存句法构建图，利用图卷积提取描述特征；TCMN直接将sentence解析成树，提出了一种Tree Attention Network。
+
+#### 1.1 CTRL
+
+主要思想是将编码后的视觉、文本特征映射到一个子空间中，语义匹配的pairs在此空间中相似度会比较高。注意作者在编码视觉特征（central clip）时，还计算了相邻的context特征作为补充。
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/ctrl-1.png"></div>
+
+#### 1.2 ACL-K
+
+该模型是对CTRL模型的改进，提出了一个action concept的概念，并将此特征与描述中的verb-obj pairs的semantic concepts进行匹配，以此提高性能。
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/acl-k-1.png"></div>
+
+#### 1.3 QSPN
+
+将query信息作为注意力，嵌入到类似R-C3D的proposal生成网络中去。
+
+<div align="center"><img height=200px  src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-1.png"></div>
+
+除此之外作者还设计了多任务损失，添加了重新生成query的损失。
+
+<div align="center"><img height=200px src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-2.png"></div>
+
+#### 1.4 MAN
+
+为解决一下两类misalignment问题，提出了利用graph convolution挖掘clip之间的关系。
+
+<div align="center"><img height=400px src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291516/iblog/LMR%20summary/man-1.png"></div>
+
+网络框架：
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-2.png"></div>
+
+作者可视化了根据图卷积计算出的clip之间关系的例子：
+
+<div align="center"><img height=350px src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-3.png"></div>
+
+#### 1.5 CMIN
+
+通过如下依存句法关系对sentence建图，使用graph convolution提取文本特征。
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291525/iblog/LMR%20summary/cmin-1.png" ></div>
+
+同时使用multi-head self attention提取视频特征，模型框架如下：
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291525/iblog/LMR%20summary/cmin-2.png" ></div>
 
 
 
