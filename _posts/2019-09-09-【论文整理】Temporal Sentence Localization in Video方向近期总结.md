@@ -15,7 +15,6 @@ tags:
 Temporal Sentence Localization in Video，该任务内容为给定一个query（包含对activity的描述），在一段视频中找到描述动作（事件）发生的起止时间，如下图所示：
 
 <div align="center"><img height="200"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1554267644/Awesome%20Language%20Moment%20Retrieval/TALL_-_2.png"></div>
-
 该任务在17年被提出，经过两年发展，目前主流工作大致分为以下三种思路：
 
 1. [Proposal-based](#1)
@@ -82,11 +81,9 @@ $$
 在模型完整（full）的情况下，前者效果更好：
 
 <div align="center"><img height="300"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-2.png"></div>
-
 同时实验也说明了这种Proposal-free的方法更加高效：
 
 <div align="center"><img height="150"  src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-3.png"></div>
-
 **Note**：本文提出的注意力机制比较繁琐，有优化的空间。
 
 #### 2.2 ExCL
@@ -96,13 +93,11 @@ $$
 本文通过text和video两模态之间的交互来直接预测起止时间，text特征使用text Bi-LSTM最后的隐含层状态$\mathbf{h}^T$，具体有如下三种多模态交互方式：
 
 <div align="center"><img height="350"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-1.png"></div>
-
 * **MLP predictor**：在每一时间步，使用拼接的$[\mathbf{h}\_t^V\|\mathbf{h}^T]$，输入MLP分别得到$S_{start}(t),S_{end}(t)$
 
-* **Tied LSTM predictor**：上述拼接的特征首先经过一个Bi-LSTM，得到$\mathbf{h}_t^P$，将$[\mathbf{h}_t^P\|\mathbf{h}_t^P\|\mathbf{h}^T]$送给MLP
+* **Tied LSTM predictor**：上述拼接的特征首先经过一个Bi-LSTM，得到$\mathbf{h}_t^P$，将$[\mathbf{h}_t^P\|\mathbf{h}_t^V\|\mathbf{h}^T]$送给MLP
 
 * **Conditioned-LSTM predictor**：由于前面两方法没有考虑$S_{start}(t)$与$S_{end}(t)$的时间次序关系，因此在计算结束时间时，引入起始时间的信息，以期使输出更加合理，公式如下：
-  
   
   $$
   \begin{aligned} \mathbf{h}_{t}^{P_{0}} &=\mathrm{LSTM}_{\text {start }}\left(\left[\mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right], \mathbf{h}_{t-1}^{P_{0}}\right) \\ \mathbf{h}_{t}^{P_{1}} &=\mathrm{LSTM}_{\text {end }}\left(\mathbf{h}_{t}^{P_{0}}, \mathbf{h}_{t-1}^{P_{1}}\right) \\ S_{\text {start }}(t) &=\mathbf{W}_{s}\left(\left[\mathbf{h}_{t}^{P_{0}} ; \mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right]\right)+\mathbf{b}_{s} \\ S_{\text {end }}(t) &=\mathbf{W}_{e}\left(\left[\mathbf{h}_{t}^{P_{1}} ; \mathbf{h}_{t}^{V} ; \mathbf{h}^{T}\right]\right)+\mathbf{b}_{e} \end{aligned}
@@ -113,7 +108,6 @@ $$
 实验结果如下：
 
 <div align="center"><img height="400"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568084144/iblog/LMR%20summary/ExCL-2.png"></div>
-
 #### 2.3 Proposal-free with Guided Attention
 
 [《Proposal-free Temporal Moment Localization of a Natural-Language Query in Video using Guided Attention》](https://arxiv.org/abs/1908.07236)，目前在Arxiv。
@@ -127,7 +121,6 @@ $$
 模型整体结构如下（编码句子特征时使用mean pool）：
 
 <div align="center"><img height="300"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-1.png"></div>
-
 Guided Attention计算公式如下（$\mathbf{G}$为视频特征）：
 
 
@@ -170,17 +163,14 @@ $$
 实验结果：
 
 <div align="center"><img height="400"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568086287/iblog/LMR%20summary/others-2.png"></div>
-
 实验说明了soft labels确实有效：
 
 <div align="center"><img height="150"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568088783/iblog/LMR%20summary/others-3.png"></div>
-
 ### <span id="3">3.Reinforcement-learning-based</span>
 
 强化学习的思路同样也是为了解决proposal-based方法对长视频提取密集、冗余的clip特征。
 
 <div align="center"><img  height="250" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188044/iblog/LMR%20summary/LMR-RL-1.png"></div>
-
 #### 3.1 TripNet
 
 [《Tripping through time: Efficient Localization of Activities in Videos》](https://arxiv.org/abs/1904.09936)，Arxiv。
@@ -205,11 +195,9 @@ $$
 一些搜索过程统计与可视化：
 
 <div align="center"><img height="600"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-5.png"></div>
-
 效率验证：
 
 <div align="center"><img height="120"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568106487/iblog/LMR%20summary/tripnet-6.png"></div>
-
 **Note**：计算当前状态时只考虑了当前窗口内的视频特征，没有考虑全局特征。
 
 #### 3.2 SM-RL
@@ -248,7 +236,6 @@ $$
 实验结果：
 
 <div align="center"><img height="150"  src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-2.png"></div>
-
 对比实验：
 
 <div align="center"><img width="350"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-3.png">
@@ -257,5 +244,4 @@ $$
 最后作者分析了location feature、监督学习中两个不同损失对指标的影响：
 
 <div align="center"><img height="200"   src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568188046/iblog/LMR%20summary/watch-5.png"></div>
-
 **Note**：observation network融合不同特征的方法还有待挖掘。
