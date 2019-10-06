@@ -18,8 +18,4 @@ Hey，我是木柯桐，中科院自动化所博士在读，视频理解，文�
 
 邮箱：iworldtong@gmail.com
 
-网易云：[木柯桐](https://music.163.com/#/user/home?id=263330394)
-
-BiliBili：[muketong](https://space.bilibili.com/28809833/#/)
-
 <br>
