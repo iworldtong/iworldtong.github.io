@@ -2,7 +2,7 @@
 >
 > EL PSY CONGROO
 
-Hey，我是木柯桐，中科院自动化所博士在读，视频理解，文本到视频方向
+Hey，我是木柯桐，中科院自动化所博士在读，[时序描述定位](https://github.com/iworldtong/Awesome-Grounding-Natural-Language-in-Video)方向
 
 热爱二次元、手绘
 
