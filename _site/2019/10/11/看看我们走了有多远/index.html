@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="0rC5v1zVHWU93qDhTriIdP6JGbOnZ9177vNXXrry3gs" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界再大，还是遇见了你">
+    <meta name="keywords"  content="iworld, 木柯桐, 博客, 深度学习, 计算机视觉, 视频理解">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="【二次元の印象】看看我们走了有多远 - 木柯桐的博客 | iworld's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="沙雕
+
+">
+    
+    <meta property="article:published_time" content="2019-10-11T00:00:00Z">
+    
+    
+    <meta property="article:author" content="iworld">
+    
+    
+    <meta property="article:tag" content="一言">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar.jpg">
+    <meta property="og:url" content="http://localhost:4000/2019/10/11/%E7%9C%8B%E7%9C%8B%E6%88%91%E4%BB%AC%E8%B5%B0%E4%BA%86%E6%9C%89%E5%A4%9A%E8%BF%9C/">
+    <meta property="og:site_name" content="木柯桐的博客 | iworld's Blog">
+    
+    <title>【二次元の印象】看看我们走了有多远 - 木柯桐的博客 | iworld's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/10/11/%E7%9C%8B%E7%9C%8B%E6%88%91%E4%BB%AC%E8%B5%B0%E4%BA%86%E6%9C%89%E5%A4%9A%E8%BF%9C/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">iworld's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/pic/">pic</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/2019-10-11-看看我们走了有多远.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/2019-10-11-看看我们走了有多远.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=%E4%B8%80%E8%A8%80" title="一言">一言</a>
+                        
+                    </div>
+                    <h1>【二次元の印象】看看我们走了有多远</h1>
+                    
+                    <h2 class="subheading">刻录曾经、现在、未来</h2>
+                    <span class="meta">Posted by iworld on October 11, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<p><a href="#1">沙雕</a></p>
+
+<p><a href="#2">治愈</a></p>
+
+<p><a href="#3">致郁</a></p>
+
+<p><a href="#4">热血</a></p>
+
+<p><a href="#5">梦想</a></p>
+
+<p><a href="#6">爱情</a></p>
+
+<p><br /></p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1570954454/iblog/%E4%BA%8C%E6%AC%A1%E5%85%83%E5%8D%B0%E8%B1%A1/%E6%B2%99%E9%9B%95.jpg" /></div>
+<h4 id="沙雕"><span id="1">沙雕</span></h4>
+
+<p>有趣的女人：阿诺撒～我想说一件很厉害的事情！</p>
+
+<p>——《女高中生的虚度日常》</p>
+
+<p>一部僵尸生存题材的黑色幽默风格动画片。</p>
+
+<p>——《佐贺偶像是传奇》</p>
+
+<p>上一秒《南家三姐妹》，下一秒《狂赌之渊》，过山车颜艺番。</p>
+
+<p>——《游戏三人娘》</p>
+
+<p>今天的风儿甚是喧嚣！</p>
+
+<p>——《男子高中的日常》</p>
+
+<p>我们所经历的每个平凡的日常，也许就是连续发生的奇迹。</p>
+
+<p>日々私たちが过ごしている日常は、実は、奇迹の连続なのかもしれない。</p>
+
+<p>——《日常》</p>
+
+<p><br /></p>
+
+<h4 id="治愈"><span id="2">治愈</span></h4>
+
+<p>我必须承认生命中大部分时光是属于孤独的，努力成长是在孤独里可以进行的最好的游戏。</p>
+
+<p>——《夏目友人帐》</p>
+
+<p>我们总是在意自己错过太多，却不曾注意自己拥有多少。</p>
+
+<p>——《未闻花名》</p>
+
+<p>难得有这样一部能让人看得这么心满意足的动画。</p>
+
+<p>——《此花亭奇谭》</p>
+
+<p>想到很久没见你了， 有点寂寞。</p>
+
+<p>——《妖精森林的小不点》</p>
+
+<p><br /></p>
+
+<h4 id="致郁"><span id="3">致郁</span></h4>
+
+<p>奥森，如果莉可再次朝地底前进，站到你面前的时候，我希望你告诉她。</p>
+
+<p>你要我告诉她，她只是一具会动的尸体吗？</p>
+
+<p>没错。</p>
+
+<p>告诉她，她能够动起来，是一个何等伟大的奇迹，还要告诉她，怎样才能挑战在前方等待的非凡冒险 。</p>
+
+<p>（哼）麻烦死了，你自己去说。不过，只是把她送到你面前这种小事，我是可以代劳。</p>
+
+<p>——《来自深渊》</p>
+
+<p>愿你们的前途充满光明</p>
+
+<p>——《约定的梦幻岛》</p>
+
+<p>等长大些，可以一人踏上旅途的时候，想要去遥远的国度，想要去遥远的岛屿，杳无人烟的岛屿，没有痛苦、没有悲伤的岛屿。在那个岛上，当我想要攀登时就爬上树木，当我想要游泳时就畅游海中，当我想要沉睡时就酣然入睡，一想到只有我不在的街道，心情就会变得非常轻松，想要去很远很远的地方。</p>
+
+<p>——《只有我不在的街道》</p>
+
+<p>一直以来，摄像机都只录下了不想回首的往事，从今以后也想让它录下和大家一起的日子，想录下幸福的日子。</p>
+
+<p>——《Charlotte》</p>
+
+<p><br /></p>
+
+<h4 id="热血"><span id="4">热血</span></h4>
+
+<p>什么都无法舍弃的人，什么也改变不了。</p>
+
+<p>——《进击的巨人》</p>
+
+<p>所谓英雄，乃是无论如何都能将绝境逐渐打碎之人！</p>
+
+<p>——《我的英雄学院》</p>
+
+<p><br /></p>
+
+<h4 id="梦想"><span id="5">梦想</span></h4>
+
+<p>我不知将去何方，但我已经在路上。</p>
+
+<p>——《千与千寻》</p>
+
+<p><br /></p>
+
+<h4 id="爱情"><span id="6">爱情</span></h4>
+
+<p>我一直在追逐那道光，然后，我找到了你。</p>
+
+<p>——《天气之子》</p>
+
+<p>那似乎是比翼鸟，这种鸟天生单翼，须靠雌雄二鸟相互依偎，否则无法翱翔天际，是种有缺陷的生物。但是，不知为何，我却认为这种生活方式是美好的，感受到了其中的美妙。</p>
+
+<p>——《DARLING in the FRANXX》</p>
+
+<p>如果我们能活着出去的话，万水千山，你愿意陪我一起看吗？</p>
+
+<p>——《狐妖小红娘》</p>
+
+<p>只要记住你的名字，不管你在世界的哪个地方，我一定会，去见你。</p>
+
+<p>——《你的名字》</p>
+
+<p>我们仰望同一片天空，却看着不同的地方。</p>
+
+<p>——《秒速五厘米》</p>
+
+<p>邪王真眼是最强的！</p>
+
+<p>——《中二病也要谈恋爱》</p>
+
+<p>——《冰菓》（这条评论很节能）</p>
+
+<p>教练，我想学习如何撩妹！</p>
+
+<p>——《青春期笨蛋少年不做兔女郎学姐的梦》</p>
+
+<p>意识流，战场原荡漾。</p>
+
+<p>——《物语系列》</p>
+
+<p><br /></p>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/09/09/%E8%AE%BA%E6%96%87%E6%95%B4%E7%90%86-Temporal-Sentence-Localization-in-Video%E6%96%B9%E5%90%91%E8%BF%91%E6%9C%9F%E6%80%BB%E7%BB%93/" data-toggle="tooltip" data-placement="top" title="【论文整理】Temporal Sentence Localization in Video方向近期总结">
+                        Previous<br>
+                        <span>【论文整理】Temporal Sentence Localization in Video方向近期总结</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/11/17/%E7%9C%8B%E5%AE%8C-%E5%A4%A9%E6%B0%94%E4%B9%8B%E5%AD%90-%E6%88%91%E5%86%B3%E5%AE%9A%E5%9B%A4%E7%82%B9%E7%A1%AC%E7%9B%98/" data-toggle="tooltip" data-placement="top" title="看完《天气之子》，我决定囤点硬盘">
+                        Next<br>
+                        <span>看完《天气之子》，我决定囤点硬盘</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+
+                
+                <!-- 网易云跟帖 评论框 start -->
+                <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+                <!-- 网易云跟帖 评论框 end -->
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0011" 
+                    href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83"
+                    title="二次元"
+                    rel="2">二次元</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=%E4%B8%80%E8%A8%80"
+                    title="一言"
+                    rel="3">一言</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=Deep+Learning"
+                    title="Deep Learning"
+                    rel="3">Deep Learning</a>
+        
+                <a data-sort="0011" 
+                    href="/archive/?tag=Video+Understanding"
+                    title="Video Understanding"
+                    rel="2">Video Understanding
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href=""></a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: {
+      equationNumbers: {
+        autoNumber: "AMS"
+      }
+    },
+    SVG: {
+      scale: 90
+    },
+    tex2jax: {
+      inlineMath: [ ['$','$'] ],
+      displayMath: [ ['$$','$$'] ],
+      processEscapes: true,
+    }
+  });
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG">
+</script>
+
+
+
+<!-- 网易云跟帖JS代码 start -->
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+  var cloudTieConfig = {
+    url: document.location.href, 
+    sourceId: "",
+    productKey: "de25fc98a6fe48b3bc8a7ae765da99a0",
+    target: "cloud-tie-wrapper"
+  };
+  var yunManualLoad = true;
+  Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+<!-- 网易云跟帖JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/iworldtong">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; iworld's Blog 2019
+                    <!-- <br>
+                    Powered by <a href="http://huangxuan.me">Hux Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'iworldtong.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

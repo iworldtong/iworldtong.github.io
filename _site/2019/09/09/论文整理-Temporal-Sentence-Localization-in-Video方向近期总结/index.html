@@ -284,24 +284,20 @@
 <p>将query信息作为注意力，嵌入到类似R-C3D的proposal生成网络中去。</p>
 
 <div align="center"><img height="200px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-1.png" /></div>
-
 <p>除此之外作者还设计了多任务损失，添加了重新生成query的损失。</p>
 
 <div align="center"><img height="200px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291245/iblog/LMR%20summary/qspn-2.png" /></div>
-
 <h4 id="14-man">1.4 MAN</h4>
 
 <p>为解决一下两类misalignment问题，提出了利用graph convolution挖掘clip之间的关系。</p>
 
 <div align="center"><img height="400px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291516/iblog/LMR%20summary/man-1.png" /></div>
-
 <p>网络框架：</p>
 
 <div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-2.png" /></div>
 <p>作者可视化了根据图卷积计算出的clip之间关系的例子：</p>
 
 <div align="center"><img height="350px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568291518/iblog/LMR%20summary/man-3.png" /></div>
-
 <h4 id="15-cmin">1.5 CMIN</h4>
 
 <p>通过如下依存句法关系对sentence建图，使用graph convolution提取文本特征。</p>
@@ -364,6 +360,8 @@
 <p>在模型完整（full）的情况下，前者效果更好：</p>
 
 <div align="center"><img height="300" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-2.png" /></div>
+<p>其实计算出的注意力直接关系到哪些clip是包含在sentence语义内的，因此直接输入attention取得了最高的效果。</p>
+
 <p>同时实验也说明了这种Proposal-free的方法更加高效：</p>
 
 <div align="center"><img height="150" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1568021479/iblog/LMR%20summary/ABLR-3.png" /></div>
@@ -531,6 +529,13 @@ r_{t}=\left\{\begin{array}{ll}{1-\phi * t,} & {t I o U^{(t)}>t I o U^{(t-1)} \ge
                     </li>
                     
                     
+                    <li class="next">
+                        <a href="/2019/10/11/%E7%9C%8B%E7%9C%8B%E6%88%91%E4%BB%AC%E8%B5%B0%E4%BA%86%E6%9C%89%E5%A4%9A%E8%BF%9C/" data-toggle="tooltip" data-placement="top" title="【二次元の印象】看看我们走了有多远">
+                        Next<br>
+                        <span>【二次元の印象】看看我们走了有多远</span>
+                        </a>
+                    </li>
+                    
                 </ul>
                 <hr style="visibility: hidden;">
 
@@ -568,17 +573,22 @@ r_{t}=\left\{\begin{array}{ll}{1-\phi * t,} & {t I o U^{(t)}>t I o U^{(t-1)} \ge
         </a>
         
         
-                <a data-sort="0009" 
+                <a data-sort="0011" 
                     href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83"
                     title="二次元"
                     rel="2">二次元</a>
         
-                <a data-sort="0008" 
+                <a data-sort="0010" 
+                    href="/archive/?tag=%E4%B8%80%E8%A8%80"
+                    title="一言"
+                    rel="3">一言</a>
+        
+                <a data-sort="0010" 
                     href="/archive/?tag=Deep+Learning"
                     title="Deep Learning"
                     rel="3">Deep Learning</a>
         
-                <a data-sort="0009" 
+                <a data-sort="0011" 
                     href="/archive/?tag=Video+Understanding"
                     title="Video Understanding"
                     rel="2">Video Understanding

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="0rC5v1zVHWU93qDhTriIdP6JGbOnZ9177vNXXrry3gs" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="世界再大，还是遇见了你">
+    <meta name="keywords"  content="iworld, 木柯桐, 博客, 深度学习, 计算机视觉, 视频理解">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="看完《天气之子》，我决定囤点硬盘 - 木柯桐的博客 | iworld's Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="上周去看了《天气之子》，虽然作为一个看过几乎所有新海诚宇宙系列的死宅，当面对大海淹没东京的画面时依然觉得很震撼。除此之外，内心中一种想买硬盘的冲动逐渐膨胀，直到双11到来 \(￣︶￣*)) （以下图文无关，大概）
+
+">
+    
+    <meta property="article:published_time" content="2019-11-17T00:00:00Z">
+    
+    
+    <meta property="article:author" content="iworld">
+    
+    
+    <meta property="article:tag" content="一言">
+    
+    
+    <meta property="og:image" content="http://localhost:4000/img/avatar.jpg">
+    <meta property="og:url" content="http://localhost:4000/2019/11/17/%E7%9C%8B%E5%AE%8C-%E5%A4%A9%E6%B0%94%E4%B9%8B%E5%AD%90-%E6%88%91%E5%86%B3%E5%AE%9A%E5%9B%A4%E7%82%B9%E7%A1%AC%E7%9B%98/">
+    <meta property="og:site_name" content="木柯桐的博客 | iworld's Blog">
+    
+    <title>看完《天气之子》，我决定囤点硬盘 - 木柯桐的博客 | iworld's Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://localhost:4000/2019/11/17/%E7%9C%8B%E5%AE%8C-%E5%A4%A9%E6%B0%94%E4%B9%8B%E5%AD%90-%E6%88%91%E5%86%B3%E5%AE%9A%E5%9B%A4%E7%82%B9%E7%A1%AC%E7%9B%98/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">iworld's Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/about/">About</a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="/archive/">Archive</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a href="/pic/">pic</a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    var __HuxNav__ = {
+        close: function(){
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        },
+        open: function(){
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+
+    // Bind Event
+    $toggle.addEventListener('click', function(e){
+        if ($navbar.className.indexOf('in') > 0) {
+            __HuxNav__.close()
+        }else{
+            __HuxNav__.open()
+        }
+    })
+
+    /**
+     * Since Fastclick is used to delegate 'touchstart' globally
+     * to hack 300ms delay in iOS by performing a fake 'click',
+     * Using 'e.stopPropagation' to stop 'touchstart' event from 
+     * $toggle/$collapse will break global delegation.
+     * 
+     * Instead, we use a 'e.target' filter to prevent handler
+     * added to document close HuxNav.  
+     *
+     * Also, we use 'click' instead of 'touchstart' as compromise
+     */
+    document.addEventListener('click', function(e){
+        if(e.target == $toggle) return;
+        if(e.target.className == 'icon-bar') return;
+        __HuxNav__.close();
+    })
+</script>
+
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/2019-11-17-看完《天气之子》，我决定囤点硬盘.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/2019-11-17-看完《天气之子》，我决定囤点硬盘.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=%E4%B8%80%E8%A8%80" title="一言">一言</a>
+                        
+                    </div>
+                    <h1>看完《天气之子》，我决定囤点硬盘</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by iworld on November 17, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<p>上周去看了《天气之子》，虽然作为一个看过几乎所有新海诚宇宙系列的死宅，当面对大海淹没东京的画面时依然觉得很震撼。除此之外，内心中一种想买硬盘的冲动逐渐膨胀，直到双11到来 \(￣︶￣*)) （以下图文无关，大概）</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1573700815/iblog/天气之子/chart-cost-per-drive-2017-pcgh.png" /></div>
+<h4 id="使用需求">使用需求</h4>
+
+<p>偶尔想做做AMV，需要存大量的动漫、电影素材等等，而且还有做实验用的数据集，给电脑做时光机等等，所以我的硬盘使用场景主要就是<strong>数据备份</strong>。</p>
+
+<p>因为只是素材盘，不需要频繁访问，因此不考虑SSD，而且暂时还没打算弄NAS。</p>
+
+<p>以前文件还不是很多时候，买个普通的移动硬盘就完事了，现在数据已经几T了，觉得使用<strong>机械硬盘外加硬盘盒</strong>的方案可能更安全一些。</p>
+
+<div align="center"><img height="400px" src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1573702331/iblog/%E5%A4%A9%E6%B0%94%E4%B9%8B%E5%AD%90/67649510_p0_master1200.jpg" /></div>
+<h4 id="硬盘参数">硬盘参数</h4>
+
+<p>整理一下买盘前需要注意的一些问题：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">参数</th>
+      <th style="text-align: center">介绍</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">接口     尺寸</td>
+      <td style="text-align: center">注意接口（SATA 1-3外观上是没分别的，接口外观、线也相同，主要是传输速率不同，主控芯片不同）、尺寸（2.5 or 3.5英寸）是否跟硬盘盒或主板相匹配</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">容量</td>
+      <td style="text-align: center">按需搭配，我选了一个4T的</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">转速</td>
+      <td style="text-align: center">以每分钟多少转来表示（RPM）。常见5400和7200RPM，转速越快，读写越快，但噪声发热也随之增加。如果是经常打游戏、拷贝大量的照片、视频素材，推荐7200RPM的</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">缓存</td>
+      <td style="text-align: center">缓存越大，速度越快。但注意很多256M的盘是<strong>SMR（叠瓦式）的，只适合做仓库盘，不怎么推荐</strong></td>
+    </tr>
+    <tr>
+      <td style="text-align: center">单碟容量</td>
+      <td style="text-align: center">主要影响连续传输速率，比如硬盘间对拷</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>另一个需要着重注意的是区分硬盘为<strong>垂直式（PMR）</strong>的还是<strong>叠瓦式（SMR）</strong>，一般推荐前者。关于这个问题可以详见<a href="https://www.bilibili.com/read/cv2701651/">这篇文章</a>。</p>
+
+<h4 id="合影">合影</h4>
+
+<p>估计过年有空的话，怕是要搭个NAS了 ╮(￣▽￣)╭</p>
+
+<div align="center"><img src="https://res.cloudinary.com/dzu6x6nqi/image/upload/v1574005725/iblog/%E5%A4%A9%E6%B0%94%E4%B9%8B%E5%AD%90/11574005642_.pic.jpg" /></div>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/10/11/%E7%9C%8B%E7%9C%8B%E6%88%91%E4%BB%AC%E8%B5%B0%E4%BA%86%E6%9C%89%E5%A4%9A%E8%BF%9C/" data-toggle="tooltip" data-placement="top" title="【二次元の印象】看看我们走了有多远">
+                        Previous<br>
+                        <span>【二次元の印象】看看我们走了有多远</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                
+
+                
+                <!-- 网易云跟帖 评论框 start -->
+                <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+                <!-- 网易云跟帖 评论框 end -->
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        </a>
+        
+        
+                <a data-sort="0011" 
+                    href="/archive/?tag=%E4%BA%8C%E6%AC%A1%E5%85%83"
+                    title="二次元"
+                    rel="2">二次元</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=%E4%B8%80%E8%A8%80"
+                    title="一言"
+                    rel="3">一言</a>
+        
+                <a data-sort="0010" 
+                    href="/archive/?tag=Deep+Learning"
+                    title="Deep Learning"
+                    rel="3">Deep Learning</a>
+        
+                <a data-sort="0011" 
+                    href="/archive/?tag=Video+Understanding"
+                    title="Video Understanding"
+                    rel="2">Video Understanding
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href=""></a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+<!-- 网易云跟帖JS代码 start -->
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+  var cloudTieConfig = {
+    url: document.location.href, 
+    sourceId: "",
+    productKey: "de25fc98a6fe48b3bc8a7ae765da99a0",
+    target: "cloud-tie-wrapper"
+  };
+  var yunManualLoad = true;
+  Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
+<!-- 网易云跟帖JS代码 end -->
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: ''
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/iworldtong">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; iworld's Blog 2019
+                    <!-- <br>
+                    Powered by <a href="http://huangxuan.me">Hux Blog</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true" >
+                    </iframe> -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Service Worker -->
+
+<script src="/js/snackbar.js "></script>
+<script src="/js/sw-registration.js "></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'iworldtong.com';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+
+
+<!-- Multi-Lingual -->
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
