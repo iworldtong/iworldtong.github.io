@@ -3,7 +3,7 @@ layout: post
 title: "《void tRrLM;》：少女与世界，你会选择哪边？"
 subtitle: ''
 author: "iworld"
-header-img: img/2020-02-20-《void tRrLM;》：少女与世界，你会选择哪边.jpg
+header-img: img/2020-02-20-《void tRrLM;》：少女与世界，你会选择哪边.jpeg
 mathjax: false
 tags:
   - 游戏
